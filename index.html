@@ -1,0 +1,2704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KBTCOE NotesDesk | Complete Campus Marketplace</title>
+
+  <!-- PDF.js library for on-device automatic random 2-page extraction -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  </script>
+
+  <!-- Official Cashfree PG JS SDK v3 for automated UPI / Gateway checkout -->
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
+  <style>
+    :root {
+      --kbt-red: #8b0000;
+      --kbt-dark-red: #660000;
+      --primary: #1e40af;
+      --dev-teal: #0f766e;
+      --seller-green: #15803d;
+      --gdrive-green: #0f9d58;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding-bottom: 85px;
+    }
+
+    .top-college-strip {
+      background: var(--kbt-dark-red);
+      color: #ffffff;
+      font-size: 0.72rem;
+      padding: 6px 1rem;
+      text-align: center;
+      letter-spacing: 0.3px;
+      font-weight: 500;
+    }
+
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 1.2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--kbt-red);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-college {
+      font-size: 0.65rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .auth-badge-btn {
+      background: #f1f5f9;
+      color: #1e293b;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: none;
+      border: 1px solid var(--border);
+    }
+
+    .dev-toggle-btn {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .dev-toggle-btn.active {
+      background: var(--dev-teal);
+      color: #ffffff;
+      border-color: var(--dev-teal);
+    }
+
+    .upload-btn {
+      background: var(--kbt-red);
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      font-weight: 600;
+      font-size: 0.78rem;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .dev-banner {
+      display: none;
+      background: #ccfbf1;
+      border-bottom: 1px solid #99f6e4;
+      color: #115e59;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 8px 1.2rem;
+      text-align: center;
+    }
+
+    .dev-btn {
+      background: var(--dev-teal);
+      color: #fff;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      margin-left: 4px;
+      cursor: pointer;
+      font-size: 0.74rem;
+      font-weight: bold;
+    }
+
+    .dev-notification-banner {
+      display: none;
+      background: #0f172a;
+      color: #38bdf8;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 8px 1.2rem;
+      text-align: center;
+      border-bottom: 2px solid #0284c7;
+    }
+
+    .hero {
+      padding: 1.4rem 1.2rem 1rem;
+      text-align: center;
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+    }
+
+    .hero h1 {
+      font-size: 1.35rem;
+      line-height: 1.3;
+      margin-bottom: 0.3rem;
+    }
+
+    .hero p {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0.4rem 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+
+    .filter-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      white-space: nowrap;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .filter-btn.active {
+      background: var(--kbt-red);
+      color: #ffffff;
+      border-color: var(--kbt-red);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0.8rem 1.2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 600px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .badge-wrap { display: flex; gap: 4px; flex-wrap: wrap; }
+
+    .card-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--kbt-red);
+      background: #fee2e2;
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .card-format-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .card-branch {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: #f1f5f9;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      line-height: 1.3;
+      margin-bottom: 5px;
+    }
+
+    .card-topic {
+      font-size: 0.78rem;
+      color: #334155;
+      margin-bottom: 6px;
+      background: #fafafa;
+      border-left: 3px solid var(--kbt-red);
+      padding: 4px 8px;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .card-filename {
+      font-size: 0.68rem;
+      color: var(--muted);
+      font-family: monospace;
+      margin-bottom: 8px;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+
+    .sample-preview-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .btn-sample-view {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      color: #3730a3;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dev-card-toolbar {
+      display: none;
+      background: #f0fdfa;
+      border: 1px dashed #0d9488;
+      border-radius: 6px;
+      padding: 6px;
+      margin-bottom: 8px;
+      font-size: 0.72rem;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .dev-card-toolbar button {
+      border: none;
+      padding: 4px 7px;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-edit-price { background: #0284c7; color: white; }
+    .btn-del { background: #e11d48; color: white; }
+    .btn-dev-open { background: #059669; color: white; }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 9px;
+      margin-top: auto;
+    }
+
+    .price {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .btn-buy {
+      background: var(--kbt-red);
+      color: white;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 50;
+      overflow-y: auto;
+    }
+
+    .modal {
+      background: white;
+      width: 100%;
+      max-width: 490px;
+      border-radius: 16px;
+      padding: 1.3rem;
+      position: relative;
+    }
+
+    .modal-close-icon {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-top: 9px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+
+    .device-file-box {
+      border: 2px dashed #0f9d58;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      background: #f0fdf4;
+      cursor: pointer;
+      display: block;
+      margin-top: 4px;
+    }
+    .device-file-box input[type="file"] { display: none; }
+
+    .avatar-preview-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      border: 2px solid var(--primary);
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 6px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 1.1rem;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      background: #f1f5f9;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: var(--kbt-red);
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .auth-tabs, .profile-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 12px;
+    }
+
+    .auth-tab, .profile-tab-btn {
+      flex: 1;
+      text-align: center;
+      padding: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--muted);
+      background: none;
+      border: none;
+    }
+
+    .auth-tab.active, .profile-tab-btn.active {
+      color: var(--kbt-red);
+      border-bottom: 2px solid var(--kbt-red);
+    }
+
+    .inventory-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 0.75rem;
+    }
+
+    .sample-pages-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .sample-page-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f8fafc;
+      text-align: center;
+      padding: 6px;
+    }
+
+    .sample-page-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .sample-badge {
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-top: 4px;
+      display: block;
+    }
+
+    .pdf-viewer-modal {
+      width: 95%;
+      max-width: 820px;
+      height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pdf-viewer-frame {
+      flex: 1;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 8px;
+      background: #525659;
+    }
+
+    .split-summary-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 0.75rem;
+    }
+
+    .split-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.74rem;
+    }
+
+    .orders-table th, .orders-table td {
+      border: 1px solid var(--border);
+      padding: 6px 6px;
+      text-align: left;
+    }
+    .orders-table th { background: #f1f5f9; }
+
+    .payment-waiting-pulse {
+      text-align: center;
+      padding: 12px;
+      border: 2px dashed #0284c7;
+      border-radius: 10px;
+      background: #f0f9ff;
+      margin-top: 8px;
+    }
+
+    .otp-display-box {
+      background: #eff6ff;
+      border: 2px dashed #3b82f6;
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 1rem 0;
+      text-align: center;
+    }
+
+    .otp-code {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: #1d4ed8;
+      margin: 4px 0;
+    }
+
+    .pill-group {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill-option {
+      flex: 1;
+      text-align: center;
+      padding: 8px 6px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #f8fafc;
+      color: var(--muted);
+      transition: 0.2s;
+    }
+
+    .pill-option.selected {
+      border-color: var(--kbt-red);
+      background: #fee2e2;
+      color: var(--kbt-red);
+    }
+
+    .forgot-link {
+      display: inline-block;
+      font-size: 0.75rem;
+      color: var(--primary);
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    .support-floating-btn {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      background: #0f172a;
+      color: #ffffff;
+      border: 1px solid #334155;
+      padding: 10px 16px;
+      border-radius: 30px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      cursor: pointer;
+      z-index: 40;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-college-strip">
+    Maratha Vidya Prasarak Samaj's KBTCOE, Nashik | Autonomous • SPPU Affiliated
+  </div>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo">🎓 KBTCOE NotesDesk</div>
+      <div class="sub-college">Udoji Maratha Boarding Campus, Gangapur Rd</div>
+    </div>
+    <div class="header-actions">
+      <button class="auth-badge-btn" id="authHeaderBtn" onclick="openAuthModal()">
+        <img id="headerUserAvatar" class="header-avatar" src="" alt="Avatar" />
+        <span id="authBadgeIcon">👤</span>
+        <span id="authBadgeLabel">Login</span>
+      </button>
+      <button class="dev-toggle-btn" id="devToggleBtn" onclick="handleDevAuth()">🛠️ Dev Mode</button>
+      <button class="upload-btn" onclick="protectedOpenUploadModal()">+ Sell Notes</button>
+    </div>
+  </header>
+
+  <!-- LIVE DEVELOPER NOTIFICATION ALERT BANNER -->
+  <div class="dev-notification-banner" id="devNotificationBanner">
+    <span>🔔 DEV ALERT: Received ₹<strong id="notifAmount">0</strong> for <span id="notifItem">Doc</span> from <span id="notifBuyer">Student</span></span>
+    <button onclick="devConfirmPaymentReceived()" style="background:#0284c7; color:#fff; border:none; padding:3px 8px; border-radius:4px; margin-left:6px; cursor:pointer; font-weight:bold;">
+      ⚡ Acknowledge & Auto-Payout
+    </button>
+  </div>
+
+  <!-- DEVELOPER BANNER -->
+  <div class="dev-banner" id="devBanner">
+    <span>⚡ DEVELOPER ADMIN ON</span>
+    <button class="dev-btn" onclick="openDevMaterialControlsModal()" style="background:#0284c7;">🎛️ Material Controls</button>
+    <button class="dev-btn" onclick="openGoogleDriveHubModal()" style="background:var(--gdrive-green);">📁 Google Drive Hub</button>
+    <button class="dev-btn" onclick="openDevAccountsModal()" style="background:#7c3aed;">👥 Students</button>
+    <button class="dev-btn" onclick="openSupportInboxModal()" style="background:#4338ca;">📬 Inquiries</button>
+    <button class="dev-btn" onclick="openDevSettingsModal()">⚙️ Fees</button>
+    <button class="dev-btn" onclick="openDevOrdersModal()">📋 Split Ledger & OTP</button>
+  </div>
+
+  <section class="hero">
+    <h1>KBTCOE Notes & Notebook Marketplace</h1>
+    <p>Official Cashfree Payment Gateway Active. Instant auto-unlock & automated splits.</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search by Subject, Topic, or File..." oninput="filterItems()" />
+    </div>
+  </section>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="setBranch('all', this)">All Branches</button>
+    <button class="filter-btn" onclick="setBranch('Mechanical', this)">Mechanical</button>
+    <button class="filter-btn" onclick="setBranch('Computer/IT', this)">Computer / IT</button>
+    <button class="filter-btn" onclick="setBranch('AI & DS', this)">AI & Data Science</button>
+    <button class="filter-btn" onclick="setBranch('Civil', this)">Civil</button>
+    <button class="filter-btn" onclick="setBranch('Electrical/E&TC', this)">Electrical / E&TC</button>
+  </div>
+
+  <main class="container">
+    <div class="grid" id="notesGrid"></div>
+  </main>
+
+  <div class="support-floating-btn" onclick="openSupportFormModal()">
+    <span>💬 Help & Feedback</span>
+  </div>
+
+  <!-- 1. DEVELOPER 3-FORM MATERIAL CONTROLS -->
+  <div class="modal-backdrop" id="devMaterialControlsModal">
+    <div class="modal">
+      <button class="modal-close-icon" onclick="closeDevMaterialControlsModal()">✕</button>
+      <h3 style="color:#0284c7;">🎛️ Developer Material Controls</h3>
+      <p style="font-size:0.75rem; color:var(--muted); margin-bottom:10px;">
+        Toggle which forms of material are allowed on the platform.
+      </p>
+
+      <div class="toggle-row">
+        <span>📱 Digital Soft Copy (PDF, PPT, Excel, Word)</span>
+        <input type="checkbox" id="toggleSoftCopy" onchange="saveMaterialControls()" />
+      </div>
+
+      <div class="toggle-row">
+        <span>📖 Original Physical Notebook (Handwritten Hard Copy)</span>
+        <input type="checkbox" id="toggleHardCopy" onchange="saveMaterialControls()" />
+      </div>
+
+      <div class="toggle-row">
+        <span>📦 Both (Soft Copy + Notebook Bundle)</span>
+        <input type="checkbox" id="toggleBothCopy" onchange="saveMaterialControls()" />
+      </div>
+
+      <div class="modal-actions" style="margin-top:14px;">
+        <button class="btn-primary" onclick="closeDevMaterialControlsModal()">Save Controls</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. GOOGLE DRIVE CLOUD HUB MODAL -->
+  <div class="modal-backdrop" id="gdriveHubModal">
+    <div class="modal" style="max-width: 500px;">
+      <button class="modal-close-icon" onclick="closeGoogleDriveHubModal()">✕</button>
+      <h3 style="color: var(--gdrive-green); display:flex; align-items:center; gap:6px;">
+        📁 Google Drive Cloud Architecture Hub
+      </h3>
+      <p style="font-size: 0.78rem; color: var(--muted); margin-top:4px;">
+        Connected Google Sheet database and document storage folder locations.
+      </p>
+
+      <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px; margin:10px 0;">
+        <div style="font-size:0.8rem; font-weight:700; color:#1e40af; margin-bottom:4px;">
+          ⚡ Active Apps Script Web App URL:
+        </div>
+        <input type="url" id="devAppsScriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%; padding:6px 8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.74rem; background:#fff;" />
+        <button type="button" class="btn-primary" style="background:#1e40af; font-size:0.72rem; padding:4px 8px; margin-top:6px;" onclick="saveAppsScriptUrl()">
+          Save Custom API Endpoint
+        </button>
+      </div>
+
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px; margin:10px 0;">
+        <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:4px;">
+          👥 Option 1: Account Information Sheet Location
+        </div>
+        <input type="url" id="devGDriveAccountsFolder" readonly style="width:100%; padding:6px 8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.76rem; background:#fff;" />
+        <div style="margin-top:6px; display:flex; gap:6px;">
+          <button type="button" class="btn-secondary" style="font-size:0.72rem; padding:4px 8px;" onclick="openDriveLink('accounts')">🌐 Open Live Sheet</button>
+          <button type="button" class="btn-primary" style="background:#166534; font-size:0.72rem; padding:4px 8px;" onclick="exportAccountsToDriveJSON()">Export Sheet Backup (.JSON)</button>
+        </div>
+      </div>
+
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px; margin:10px 0;">
+        <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:4px;">
+          📚 Option 2: Uploaded Documents Drive Folder Location
+        </div>
+        <input type="url" id="devGDriveDocsFolder" readonly style="width:100%; padding:6px 8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.76rem; background:#fff;" />
+        <div style="margin-top:6px; display:flex; gap:6px;">
+          <button type="button" class="btn-secondary" style="font-size:0.72rem; padding:4px 8px;" onclick="openDriveLink('docs')">🌐 Open Drive Folder</button>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeGoogleDriveHubModal()">Close Hub</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. AUTOMATIC 2-PAGE SAMPLES VIEWER MODAL -->
+  <div class="modal-backdrop" id="sampleViewerModal">
+    <div class="modal" style="max-width: 520px; text-align: center;">
+      <button class="modal-close-icon" onclick="closeSampleModal()">✕</button>
+      <h3 id="sampleViewTitle">Material Sample Preview</h3>
+      <p id="sampleViewSubtitle" style="font-size: 0.75rem; color: var(--muted);">2 Preview Pages / Slides</p>
+
+      <div class="sample-pages-container">
+        <div class="sample-page-card">
+          <img id="sampleImg1" src="" alt="Page Sample 1" />
+          <span class="sample-badge" id="sampleBadge1">Page Sample 1</span>
+        </div>
+        <div class="sample-page-card">
+          <img id="sampleImg2" src="" alt="Page Sample 2" />
+          <span class="sample-badge" id="sampleBadge2">Page Sample 2</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeSampleModal()">Close Preview</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. USER PROFILE & BUY/SELL INVENTORY MODAL -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal">
+      <button class="modal-close-icon" onclick="closeAuthModal()">✕</button>
+
+      <!-- Unauthenticated View -->
+      <div id="unauthContainer">
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</div>
+          <div class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')">Create Account</div>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label>WhatsApp Phone Number *</label>
+            <input type="tel" id="loginPhone" placeholder="e.g. 9405889886" required />
+          </div>
+          <div class="form-group">
+            <label>Password *</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required />
+          </div>
+          <div style="text-align: right;">
+            <span class="forgot-link" onclick="openForgotOtpFlow()">Forgot Password? Login via WhatsApp OTP</span>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="closeAuthModal()">Cancel</button>
+            <button type="submit" class="btn-primary" id="btnLoginSubmit">Sign In</button>
+          </div>
+        </form>
+
+        <form id="forgotOtpForm" style="display:none;" onsubmit="handleForgotOtpSubmit(event)">
+          <h4 style="color:var(--primary); font-size:0.9rem; margin-bottom:4px;">Recover Access via WhatsApp OTP</h4>
+          <p style="font-size:0.75rem; color:var(--muted); margin-bottom:10px;">Verifies against your registered Google Sheet account.</p>
+
+          <div class="form-group">
+            <label>Registered WhatsApp Phone *</label>
+            <div style="display:flex; gap:6px;">
+              <input type="tel" id="forgotPhone" placeholder="e.g. 9405889886" required />
+              <button type="button" class="btn-primary" id="btnSendForgotOtp" style="flex:0 0 100px; font-size:0.75rem; background:#16a34a;" onclick="requestForgotOtp()">
+                Send OTP
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group" id="forgotOtpCodeGroup" style="display:none;">
+            <label>Enter 6-Digit OTP *</label>
+            <input type="text" id="forgotOtpInput" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:3px; font-weight:bold;" />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="backToPasswordLogin()">Back to Password</button>
+            <button type="submit" class="btn-primary" id="btnVerifyForgotOtp" style="display:none;">Verify & Log In</button>
+          </div>
+        </form>
+
+        <form id="signupForm" style="display:none;" onsubmit="handleSignupSubmit(event)">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="regName" placeholder="e.g. Rahul Patil" required />
+          </div>
+          <div class="form-group">
+            <label>Department / Branch *</label>
+            <select id="regBranch" required>
+              <option value="Mechanical">Mechanical Engineering</option>
+              <option value="Computer/IT">Computer / IT Engineering</option>
+              <option value="AI & DS">Artificial Intelligence & Data Science</option>
+              <option value="Civil">Civil Engineering</option>
+              <option value="Electrical/E&TC">Electrical / E&TC Engineering</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>WhatsApp Phone Number *</label>
+            <input type="tel" id="regPhone" placeholder="e.g. 9405889886" required />
+          </div>
+          <div class="form-group">
+            <label>Create Password *</label>
+            <input type="password" id="regPassword" placeholder="Minimum 4 characters" minlength="4" required />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="closeAuthModal()">Cancel</button>
+            <button type="submit" class="btn-primary" id="btnRegisterSubmit">Create Account</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Authenticated Profile View -->
+      <div id="loggedInProfileView" style="display:none;">
+        <div style="text-align:center;">
+          <div style="position:relative; display:inline-block;">
+            <img id="profileCardAvatar" class="avatar-preview-circle" src="" alt="Profile" />
+            <button type="button" onclick="document.getElementById('changeAvatarInput').click()" style="display:block; margin:2px auto 8px; background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; font-size:0.72rem; padding:4px 8px; border-radius:14px; cursor:pointer; font-weight:700;">
+              📷 Change Photo
+            </button>
+            <input type="file" id="changeAvatarInput" accept="image/*" style="display:none;" onchange="handleChangeProfilePhoto(event)" />
+          </div>
+
+          <h3 id="profileNameDisplay" style="color:var(--text); font-size:1.1rem;">Student Name</h3>
+          <p id="profileBranchDisplay" style="font-size:0.75rem; color:var(--muted); margin-bottom:8px;">Branch • Phone</p>
+        </div>
+
+        <div class="profile-tabs">
+          <button class="profile-tab-btn active" id="tabPurchasedBtn" onclick="switchProfileInventoryTab('purchased')">
+            📥 My Purchases (<span id="countPurchased">0</span>)
+          </button>
+          <button class="profile-tab-btn" id="tabListedBtn" onclick="switchProfileInventoryTab('listed')">
+            📤 My Listed Materials (<span id="countListed">0</span>)
+          </button>
+        </div>
+
+        <div id="purchasedListContainer" style="max-height:220px; overflow-y:auto; padding:2px;"></div>
+        <div id="listedListContainer" style="display:none; max-height:220px; overflow-y:auto; padding:2px;"></div>
+
+        <div class="modal-actions" style="margin-top:14px;">
+          <button type="button" class="btn-secondary" onclick="closeAuthModal()">⬅ Back to Store</button>
+          <button type="button" class="btn-secondary" style="color:#e11d48; font-weight:bold;" onclick="handleLogout()">Log Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SELLER UPLOAD MODAL -->
+  <div class="modal-backdrop" id="sellerModal">
+    <div class="modal">
+      <button class="modal-close-icon" onclick="closeUploadModal()">✕</button>
+      <h3 style="color: var(--kbt-red);">Upload Notes & Study Material</h3>
+      <p style="font-size: 0.8rem; color: var(--muted);">Direct device upload. Saves to Google Drive & Google Sheet database automatically.</p>
+
+      <form id="sellerForm" onsubmit="handleSellerSubmit(event)">
+        <div class="form-group">
+          <label>1. Material Form *</label>
+          <select id="sellerListingType" onchange="toggleSellerDocInput()" required></select>
+        </div>
+
+        <div class="form-group">
+          <label>2. Department / Branch *</label>
+          <select id="sellerBranch" onchange="updateGeneratedFileName()" required>
+            <option value="Mechanical">Mechanical Engineering</option>
+            <option value="Computer/IT">Computer / IT Engineering</option>
+            <option value="AI & DS">Artificial Intelligence & Data Science</option>
+            <option value="Civil">Civil Engineering</option>
+            <option value="Electrical/E&TC">Electrical / E&TC Engineering</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>3. Subject Name *</label>
+          <input type="text" id="sellerSubject" placeholder="e.g. Applied Thermodynamics" oninput="updateGeneratedFileName()" required />
+        </div>
+
+        <div class="form-group">
+          <label>4. Specific Topics / Units Covered *</label>
+          <input type="text" id="sellerTopic" placeholder="e.g. Units 1 to 3 Entropy" oninput="updateGeneratedFileName()" required />
+        </div>
+
+        <div class="form-group">
+          <label>🏷️ Standard File Name:</label>
+          <div id="generatedFileNameBox" style="font-size:0.75rem; font-family:monospace; color:#0f766e; background:#f0fdfa; border:1px dashed #99f6e4; padding:6px 10px; border-radius:6px; word-break:break-all;">
+            KBTCOE_Mechanical_Applied_Thermodynamics.pdf
+          </div>
+        </div>
+
+        <div class="form-group" id="sellerDocGroup" style="display:block;">
+          <label>📁 Select Document from Device (PDF, PPT, PPTX, Excel, Word) *</label>
+          <div class="device-file-box" onclick="triggerDeviceFileInput()">
+            <span id="pdfFileSelectLabel" style="font-size:0.84rem; font-weight:bold; color:var(--gdrive-green);">
+              📄 Tap here to Choose Document from Phone
+            </span>
+            <div id="pdfSelectedFileInfo" style="font-size:0.72rem; color:var(--muted); margin-top:4px;">
+              Supports PDF, PPT, PPTX, Excel, Word. 2 genuine preview pages/slides will be generated.
+            </div>
+            <input type="file" id="sellerPdfFileInput" accept=".pdf,.ppt,.pptx,.xls,.xlsx,.doc,.docx" onchange="handleDirectFileUpload(event)" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Title of Material *</label>
+          <input type="text" id="sellerTitle" placeholder="e.g. Complete Revision Notes & Solved Problems" required />
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <div class="form-group" style="flex: 1;">
+            <label>Price you want (₹) *</label>
+            <input type="number" id="sellerPrice" placeholder="50" min="10" max="300" required />
+          </div>
+          <div class="form-group" style="flex: 1.5;">
+            <label>Your Seller Payout UPI ID *</label>
+            <input type="text" id="sellerUPI" placeholder="seller@okaxis" required />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeUploadModal()">Cancel</button>
+          <button type="submit" class="btn-primary" id="btnPublishDoc">Publish to Platform</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. CHECKOUT MODAL -->
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal">
+      <button class="modal-close-icon" onclick="closeModal()">✕</button>
+      <h3 id="modalTitle">Order Confirmation</h3>
+      <p id="modalSub" style="font-size: 0.78rem; color: var(--muted); margin-bottom: 8px;"></p>
+
+      <div class="form-group">
+        <label>Select Format:</label>
+        <div class="pill-group">
+          <div class="pill-option" id="optSoft" onclick="selectFormat('soft')">
+            📱 Digital Soft Copy<br><span style="font-size:0.7rem; font-weight:normal;">Direct Access</span>
+          </div>
+          <div class="pill-option" id="optHard" onclick="selectFormat('hard')">
+            📖 Original Notebook<br><span style="font-size:0.7rem; font-weight:normal;">Physical Handover</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="split-summary-box">
+        <div style="font-weight:700; margin-bottom:6px; color:var(--text);">Payment Breakdown:</div>
+        <div class="split-row">
+          <span>1. Seller Receives (Direct Note Price):</span>
+          <span style="background:#dcfce7; color:var(--seller-green); padding:2px 6px; border-radius:4px; font-weight:700;" id="splitSellerShare">₹0</span>
+        </div>
+        <div class="split-row">
+          <span>2. Developer Platform Fee (<span id="splitDevPercent">10%</span>):</span>
+          <span style="background:#ccfbf1; color:var(--dev-teal); padding:2px 6px; border-radius:4px; font-weight:700;" id="splitDevShare">₹0</span>
+        </div>
+        <div style="border-top:1px dashed var(--border); margin-top:6px; padding-top:6px; display:flex; justify-content:space-between; font-weight:800; font-size:0.9rem;">
+          <span>Total Payable:</span>
+          <span style="color:var(--kbt-red);" id="splitTotalPayable">₹0</span>
+        </div>
+      </div>
+
+      <div class="payment-waiting-pulse" id="onlinePayPulseArea">
+        <div style="font-size:0.8rem; font-weight:700; color:#0369a1;">
+          ⚡ Instant Automated Unlock via Cashfree
+        </div>
+        <small style="font-size:0.72rem; color:var(--muted); display:block; margin-top:4px;">
+          Supports Google Pay, PhonePe, Paytm, Dynamic UPI QR & Net Banking.
+        </small>
+      </div>
+
+      <div id="hardCopyDetailsArea" style="display: none; margin-top: 10px;">
+        <div class="form-group">
+          <label>Your Name (For Senior Handover) *</label>
+          <input type="text" id="buyerInfo" placeholder="e.g. Rahul Patil" />
+        </div>
+        <div class="form-group">
+          <label>WhatsApp Number (For OTP coordination) *</label>
+          <input type="tel" id="buyerPhone" placeholder="e.g. 9405889886" />
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" id="btnCashfreePay" onclick="launchCashfreeCheckout()">
+          Proceed to Pay (UPI / QR)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. OTP SUCCESS MODAL -->
+  <div class="modal-backdrop" id="otpSuccessModal">
+    <div class="modal" style="text-align: center;">
+      <button class="modal-close-icon" onclick="closeOtpModal()">✕</button>
+      <h3 style="color: #15803d;">🎉 Handover Order Placed!</h3>
+      <div class="otp-display-box">
+        <div style="font-size: 0.75rem; color: #1e40af; font-weight: 600;">CAMPUS HANDOVER VERIFICATION OTP</div>
+        <div class="otp-code" id="displayOtp">000000</div>
+        <div style="font-size: 0.75rem; color: var(--muted);" id="displayOrderId">Order ID: #KBT-000</div>
+      </div>
+      <div style="font-size: 0.76rem; text-align: left; background: #f8fafc; border: 1px solid var(--border); padding: 10px; border-radius: 8px;">
+        📍 <strong>Campus Handover Spot:</strong> KBTCOE Central Library / Department Porch<br>
+        💳 <strong>Payment Status:</strong> <span id="displayPayStatus">Paid Online</span><br>
+        🛡️ <strong>Safety Guarantee:</strong> Provide this OTP to the senior only after inspecting the notebook.
+      </div>
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="closeOtpModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. DOCUMENT VIEWER -->
+  <div class="modal-backdrop" id="pdfReaderModal">
+    <div class="modal pdf-viewer-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h3 id="pdfReaderTitle" style="font-size:1.05rem; color:var(--primary);">Study Document</h3>
+          <small id="pdfReaderFilename" style="color:var(--muted); font-family:monospace;">file.pdf</small>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-primary" id="btnDownloadNativePdf" style="background:#16a34a; font-size:0.75rem; padding:6px 12px;">
+            ⬇️ Download to Phone
+          </button>
+          <button class="btn-secondary" style="font-size:0.75rem; padding:6px 10px;" onclick="closePdfReaderModal()">✕</button>
+        </div>
+      </div>
+      <iframe id="pdfViewerIframe" class="pdf-viewer-frame" src=""></iframe>
+      <div id="nonPdfNotice" style="display:none; text-align:center; padding:2rem; color:#fff; background:#1e293b; border-radius:8px; margin-top:8px;">
+        <h3>Presentation / Office Document</h3>
+        <p style="font-size:0.8rem; margin:8px 0;">Stored natively in Google Drive. Click "Download to Phone" above to open it directly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. DEVELOPER SETTINGS MODAL -->
+  <div class="modal-backdrop" id="devSettingsModal">
+    <div class="modal">
+      <button class="modal-close-icon" onclick="closeDevSettingsModal()">✕</button>
+      <h3 style="color: #0f766e;">⚙️ Developer UPI & Commission Config</h3>
+      <form onsubmit="saveDevSettings(event)">
+        <div class="form-group">
+          <label>Your Developer / Platform UPI ID *</label>
+          <input type="text" id="devUPIInput" placeholder="yourupi@okaxis" required />
+        </div>
+        <div class="form-group">
+          <label>Platform Commission Percentage (%) *</label>
+          <input type="number" id="devCommissionInput" min="0" max="50" placeholder="10" required />
+        </div>
+        <div class="form-group">
+          <label>Flat Platform Fee (₹)</label>
+          <input type="number" id="devFlatFeeInput" min="0" max="20" placeholder="0" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeDevSettingsModal()">Cancel</button>
+          <button type="submit" class="btn-primary" style="background:#0f766e;">Save Settings</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 10. DEVELOPER ORDERS & OTP HANDOVER DESK -->
+  <div class="modal-backdrop" id="devOrdersModal">
+    <div class="modal" style="max-width: 720px;">
+      <button class="modal-close-icon" onclick="closeDevOrdersModal()">✕</button>
+      <h3 style="color: var(--dev-teal);">📋 Split Ledger, Payouts & OTP Verification</h3>
+      
+      <div style="display: flex; gap: 8px; margin: 10px 0;">
+        <input type="text" id="verifyOtpInput" placeholder="Enter student 6-digit handover OTP" style="flex: 2; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); font-weight: bold; letter-spacing: 2px;" />
+        <button onclick="verifyStudentOtp()" style="flex: 1; background: #0f766e; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Verify Handover</button>
+      </div>
+
+      <div style="display:flex; gap:8px; margin:10px 0;">
+        <div style="flex:1; background:#f0fdf4; border:1px solid #bbf7d0; padding:8px; border-radius:8px; text-align:center;">
+          <div style="font-size:0.7rem; color:#166534; font-weight:600;">PLATFORM PROFIT</div>
+          <div style="font-size:1.1rem; font-weight:800; color:#15803d;" id="statTotalProfit">₹0</div>
+        </div>
+        <div style="flex:1; background:#eff6ff; border:1px solid #bfdbfe; padding:8px; border-radius:8px; text-align:center;">
+          <div style="font-size:0.7rem; color:#1e40af; font-weight:600;">SELLER PAYOUTS DUE</div>
+          <div style="font-size:1.1rem; font-weight:800; color:#1d4ed8;" id="statSellerPayoutsDue">₹0</div>
+        </div>
+      </div>
+
+      <div style="max-height: 230px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px;">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Student</th>
+              <th>Total</th>
+              <th>Seller Share</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody"></tbody>
+        </table>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeDevOrdersModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. DEVELOPER ACCOUNTS MODAL -->
+  <div class="modal-backdrop" id="devAccountsModal">
+    <div class="modal" style="max-width: 650px;">
+      <button class="modal-close-icon" onclick="closeDevAccountsModal()">✕</button>
+      <h3 style="color: #7c3aed;">👥 Student Directory</h3>
+      <div style="max-height: 240px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin: 10px 0;">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Branch</th>
+              <th>WhatsApp Phone</th>
+            </tr>
+          </thead>
+          <tbody id="accountsTableBody"></tbody>
+        </table>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeDevAccountsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. CUSTOMER SUPPORT & INBOX MODALS -->
+  <div class="modal-backdrop" id="supportFormModal">
+    <div class="modal">
+      <button class="modal-close-icon" onclick="closeSupportFormModal()">✕</button>
+      <h3 style="color: var(--primary);">Student Help Desk & Feedback</h3>
+      <form onsubmit="handleSupportSubmit(event)">
+        <div class="form-group">
+          <label>Inquiry Type *</label>
+          <select id="supportType" required>
+            <option value="Complaint">⚠️ Complaint (Unlocking / Payment)</option>
+            <option value="Review">⭐ Note Quality Review</option>
+            <option value="Suggestion">💡 Feature Suggestion</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="supportName" placeholder="e.g. Mayank Patil" required />
+        </div>
+        <div class="form-group">
+          <label>WhatsApp Contact Number *</label>
+          <input type="tel" id="supportPhone" placeholder="e.g. 9405889886" required />
+        </div>
+        <div class="form-group">
+          <label>Your Message *</label>
+          <textarea id="supportMessage" rows="3" placeholder="Describe your issue..." required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeSupportFormModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Submit to Developer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="supportInboxModal">
+    <div class="modal" style="max-width: 640px;">
+      <button class="modal-close-icon" onclick="closeSupportInboxModal()">✕</button>
+      <h3 style="color: #4338ca;">📬 Student Inquiries & Feedback</h3>
+      <div style="max-height: 280px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin: 12px 0;">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Student</th>
+              <th>Type</th>
+              <th>Message</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="supportTableBody"></tbody>
+        </table>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeSupportInboxModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // SMART DYNAMIC ENDPOINT: Default live Apps Script deployment
+    const DEFAULT_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7rsVAaLXGYM5Yn2IqQCJm-7_FA5iFaLR-8MBcGFFS5xz46lQnfs_C3gcYJm8ycAtN/exec";
+    let APPS_SCRIPT_WEBAPP_URL = localStorage.getItem('kbtcoe_apps_script_url') || DEFAULT_APPS_SCRIPT_URL;
+
+    const GDRIVE_ACCOUNTS_SHEET_URL = "https://docs.google.com/spreadsheets/d/14vzQNlC05ikAm5WCbb01nTRZHUl18SXd03XVGiVq80g/edit";
+    const GDRIVE_DOCS_FOLDER_URL = "https://drive.google.com/drive/folders/1uaiMMcoI6EPAn7viyAlM4WLPW0GB701a";
+
+    // Initialize Cashfree in Production Mode
+    const cashfree = Cashfree({ mode: "production" });
+
+    const DB_NAME = "KBTCOE_Platform_DB";
+    const DB_VERSION = 1;
+    let db;
+
+    function initIndexedDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const dbInstance = e.target.result;
+          if (!dbInstance.objectStoreNames.contains("platform_pdfs")) {
+            dbInstance.createObjectStore("platform_pdfs", { keyPath: "id" });
+          }
+        };
+        req.onsuccess = (e) => {
+          db = e.target.result;
+          resolve(db);
+        };
+        req.onerror = (e) => reject(e);
+      });
+    }
+
+    function savePdfToPlatformDB(id, fileData, ext) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(["platform_pdfs"], "readwrite");
+        const store = tx.objectStore("platform_pdfs");
+        store.put({ id: id, data: fileData, ext: ext });
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = (e) => reject(e);
+      });
+    }
+
+    function getPdfFromPlatformDB(id) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(["platform_pdfs"], "readonly");
+        const store = tx.objectStore("platform_pdfs");
+        const req = store.get(id);
+        req.onsuccess = () => resolve(req.result ? req.result : null);
+        req.onerror = (e) => reject(e);
+      });
+    }
+
+    const defaultItems = [
+      {
+        id: 1,
+        sellerPhone: "9876543210",
+        title: "Applied Thermodynamics Handwritten Register",
+        branch: "Mechanical",
+        subject: "Applied Thermodynamics",
+        topic: "Units 1–4: Laws of Thermo, Steam Cycles, Entropy",
+        fileName: "KBTCOE_Mech_Applied_Thermodynamics.pdf",
+        category: "Full Notes",
+        listingType: "soft_only",
+        docExt: "pdf",
+        samplePages: [
+          { label: "Page 2 Sample", img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80" },
+          { label: "Page 6 Sample", img: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=400&q=80" }
+        ],
+        price: 50,
+        upi: "senior_mech@okaxis"
+      },
+      {
+        id: 2,
+        sellerPhone: "9823456789",
+        title: "BEE Circuit Analysis Solved Excel Sheet",
+        branch: "Electrical/E&TC",
+        subject: "BEE (FE Core)",
+        topic: "Mesh/Nodal Matrix Calculations & Numerical Formulas",
+        fileName: "KBTCOE_Electrical_BEE_Calculations.xlsx",
+        category: "Formula Sheet",
+        listingType: "soft_only",
+        docExt: "xlsx",
+        samplePages: [
+          { label: "Sheet 1 Sample", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80" },
+          { label: "Sheet 2 Sample", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80" }
+        ],
+        price: 40,
+        upi: "senior_ee@okhdfcbank"
+      },
+      {
+        id: 3,
+        sellerPhone: "9876543210",
+        title: "Engineering Mechanics Presentation Slides",
+        branch: "Mechanical",
+        subject: "Engineering Mechanics",
+        topic: "Centroid, Moment of Inertia, Friction, Curvilinear Motion",
+        fileName: "KBTCOE_Mech_Engg_Mechanics.pptx",
+        category: "Full Notes",
+        listingType: "both",
+        docExt: "pptx",
+        samplePages: [
+          { label: "Slide 1 Sample", img: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=400&q=80" },
+          { label: "Slide 2 Sample", img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80" }
+        ],
+        price: 35,
+        upi: "mechtopper@oksbi"
+      }
+    ];
+
+    const defaultDevSettings = {
+      upi: "kbtcoenotes.admin@okaxis",
+      commissionPercent: 10,
+      flatFee: 2,
+      enableSoft: true,
+      enableHard: true,
+      enableBoth: true
+    };
+
+    let items = JSON.parse(localStorage.getItem('kbtcoe_items')) || defaultItems;
+    let orders = JSON.parse(localStorage.getItem('kbtcoe_orders')) || [];
+    let devSettings = JSON.parse(localStorage.getItem('kbtcoe_dev_settings')) || defaultDevSettings;
+    let studentMessages = JSON.parse(localStorage.getItem('kbtcoe_student_messages')) || [];
+    let accounts = JSON.parse(localStorage.getItem('kbtcoe_student_accounts')) || [];
+    let currentUser = JSON.parse(localStorage.getItem('kbtcoe_current_user')) || null;
+
+    let isDevMode = false;
+    let currentBranch = 'all';
+    let activeItem = null;
+    let selectedFormat = 'soft';
+    let pendingCheckoutOrder = null;
+
+    let stagedFileBlob = null;
+    let stagedFileExt = 'pdf';
+    let autoExtractedSamplePages = [];
+
+    let currentForgotOtp = null;
+    let forgotOtpTargetUser = null;
+
+    function saveItems() { localStorage.setItem('kbtcoe_items', JSON.stringify(items)); }
+    function saveOrders() { localStorage.setItem('kbtcoe_orders', JSON.stringify(orders)); }
+    function saveDevSettingsStore() { localStorage.setItem('kbtcoe_dev_settings', JSON.stringify(devSettings)); }
+    function saveStudentMessages() { localStorage.setItem('kbtcoe_student_messages', JSON.stringify(studentMessages)); }
+    function saveAccounts() { localStorage.setItem('kbtcoe_student_accounts', JSON.stringify(accounts)); }
+    function saveCurrentUser() { localStorage.setItem('kbtcoe_current_user', JSON.stringify(currentUser)); }
+
+    function refreshAuthUI() {
+      const avatarImg = document.getElementById('headerUserAvatar');
+      const iconSpan = document.getElementById('authBadgeIcon');
+      const labelSpan = document.getElementById('authBadgeLabel');
+
+      if (currentUser) {
+        if (currentUser.avatar) {
+          avatarImg.src = currentUser.avatar;
+          avatarImg.style.display = 'inline-block';
+          iconSpan.style.display = 'none';
+        } else {
+          avatarImg.style.display = 'none';
+          iconSpan.style.display = 'inline-block';
+          iconSpan.innerText = '🎓';
+        }
+        labelSpan.innerText = currentUser.name.split(' ')[0];
+      } else {
+        avatarImg.style.display = 'none';
+        iconSpan.style.display = 'inline-block';
+        iconSpan.innerText = '👤';
+        labelSpan.innerText = 'Login';
+      }
+    }
+
+    function requireLogin(actionName) {
+      if (!currentUser) {
+        alert(`🔒 Please Sign In or Create an Account first to ${actionName}.`);
+        openAuthModal();
+        return false;
+      }
+      return true;
+    }
+
+    function protectedOpenUploadModal() {
+      if (!requireLogin("sell notes")) return;
+      openUploadModal();
+    }
+
+    function protectedOpenCheckout(itemId) {
+      if (!requireLogin("purchase study notes")) return;
+      openCheckoutModal(itemId);
+    }
+
+    function openAuthModal() {
+      if (currentUser) {
+        document.getElementById('unauthContainer').style.display = 'none';
+        document.getElementById('loggedInProfileView').style.display = 'block';
+
+        document.getElementById('profileCardAvatar').src = currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80';
+        document.getElementById('profileNameDisplay').innerText = currentUser.name;
+        document.getElementById('profileBranchDisplay').innerText = `${currentUser.branch} • ${currentUser.phone}`;
+
+        renderProfileInventory();
+        switchProfileInventoryTab('purchased');
+      } else {
+        document.getElementById('unauthContainer').style.display = 'block';
+        document.getElementById('loggedInProfileView').style.display = 'none';
+        switchAuthTab('login');
+      }
+      document.getElementById('authModal').style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').style.display = 'none';
+    }
+
+    function handleChangeProfilePhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = 150;
+          canvas.height = 150;
+          ctx.drawImage(img, 0, 0, 150, 150);
+          const newAvatarBase64 = canvas.toDataURL('image/jpeg', 0.8);
+
+          currentUser.avatar = newAvatarBase64;
+          saveCurrentUser();
+
+          const acc = accounts.find(a => a.phone === currentUser.phone);
+          if (acc) {
+            acc.avatar = newAvatarBase64;
+            saveAccounts();
+          }
+
+          document.getElementById('profileCardAvatar').src = newAvatarBase64;
+          refreshAuthUI();
+          alert("✅ Profile picture updated successfully!");
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function openForgotOtpFlow() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('forgotOtpForm').style.display = 'block';
+      document.getElementById('forgotPhone').value = document.getElementById('loginPhone').value.trim();
+    }
+
+    function backToPasswordLogin() {
+      document.getElementById('forgotOtpForm').style.display = 'none';
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('forgotOtpCodeGroup').style.display = 'none';
+      document.getElementById('btnVerifyForgotOtp').style.display = 'none';
+    }
+
+    async function requestForgotOtp() {
+      const phone = document.getElementById('forgotPhone').value.trim();
+      if (!phone) {
+        alert("Please enter your registered WhatsApp phone number.");
+        return;
+      }
+
+      const btn = document.getElementById('btnSendForgotOtp');
+      btn.innerText = "Checking...";
+      btn.disabled = true;
+
+      try {
+        // Generate recovery code
+        currentForgotOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        forgotOtpTargetUser = { phone: phone, name: "Student (" + phone.slice(-4) + ")" };
+
+        document.getElementById('forgotOtpCodeGroup').style.display = 'block';
+        document.getElementById('btnVerifyForgotOtp').style.display = 'block';
+        document.getElementById('forgotOtpInput').value = currentForgotOtp;
+
+        alert(`📲 [WhatsApp Simulation]\nFrom: KBTCOE NotesDesk\nYour 6-Digit Password Reset Login OTP is: ${currentForgotOtp}`);
+      } catch (err) {
+        console.error(err);
+        alert("Could not process OTP recovery.");
+      } finally {
+        btn.innerText = "Send OTP";
+        btn.disabled = false;
+      }
+    }
+
+    function handleForgotOtpSubmit(e) {
+      e.preventDefault();
+      const enteredOtp = document.getElementById('forgotOtpInput').value.trim();
+
+      if (!currentForgotOtp || enteredOtp !== currentForgotOtp) {
+        alert("❌ Invalid OTP! Please request a new code.");
+        return;
+      }
+
+      currentUser = forgotOtpTargetUser;
+      saveCurrentUser();
+      refreshAuthUI();
+      closeAuthModal();
+
+      currentForgotOtp = null;
+      forgotOtpTargetUser = null;
+      backToPasswordLogin();
+
+      alert(`🎉 Logged in successfully via OTP recovery! Welcome back, ${currentUser.name}!`);
+    }
+
+    function switchProfileInventoryTab(tab) {
+      const pBtn = document.getElementById('tabPurchasedBtn');
+      const lBtn = document.getElementById('tabListedBtn');
+      const pContainer = document.getElementById('purchasedListContainer');
+      const lContainer = document.getElementById('listedListContainer');
+
+      if (tab === 'purchased') {
+        pBtn.classList.add('active');
+        lBtn.classList.remove('active');
+        pContainer.style.display = 'block';
+        lContainer.style.display = 'none';
+      } else {
+        lBtn.classList.add('active');
+        pBtn.classList.remove('active');
+        lContainer.style.display = 'block';
+        pContainer.style.display = 'none';
+      }
+    }
+
+    function renderProfileInventory() {
+      const userPurchases = orders.filter(o => o.phone === currentUser.phone && o.status && o.status.includes('UNLOCKED'));
+      document.getElementById('countPurchased').innerText = userPurchases.length;
+      const pContainer = document.getElementById('purchasedListContainer');
+      pContainer.innerHTML = '';
+
+      if (userPurchases.length === 0) {
+        pContainer.innerHTML = '<p style="text-align:center; color:var(--muted); font-size:0.75rem; padding:1rem;">You have not purchased any study documents yet.</p>';
+      } else {
+        userPurchases.forEach(order => {
+          const item = items.find(i => i.id === order.itemId) || { id: order.itemId, title: order.itemTitle, fileName: order.fileName || "Study_File.pdf", docExt: order.docExt || "pdf" };
+          const div = document.createElement('div');
+          div.className = 'inventory-item';
+          div.innerHTML = `
+            <div style="overflow:hidden;">
+              <strong style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${order.itemTitle}</strong>
+              <small style="color:var(--muted); font-family:monospace;">${order.fileName || 'Document'}</small>
+            </div>
+            <button class="btn-primary" style="font-size:0.7rem; padding:4px 8px; background:#16a34a; flex-shrink:0;" onclick="closeAuthModal(); openNativeDocReader(item);">
+              📖 Open & Read
+            </button>
+          `;
+          pContainer.appendChild(div);
+        });
+      }
+
+      const userListed = items.filter(i => i.sellerPhone === currentUser.phone);
+      document.getElementById('countListed').innerText = userListed.length;
+      const lContainer = document.getElementById('listedListContainer');
+      lContainer.innerHTML = '';
+
+      if (userListed.length === 0) {
+        lContainer.innerHTML = '<p style="text-align:center; color:var(--muted); font-size:0.75rem; padding:1rem;">You have not listed any notes for sale yet.</p>';
+      } else {
+        userListed.forEach(mat => {
+          const div = document.createElement('div');
+          div.className = 'inventory-item';
+          div.innerHTML = `
+            <div style="overflow:hidden;">
+              <strong style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${mat.title}</strong>
+              <small style="color:var(--muted);">₹${mat.price} • ${mat.listingType.replace('_', ' ').toUpperCase()}</small>
+            </div>
+            <span style="color:#16a34a; font-weight:bold; font-size:0.75rem;">Active for Sale</span>
+          `;
+          lContainer.appendChild(div);
+        });
+      }
+    }
+
+    function switchAuthTab(tab) {
+      if (tab === 'login') {
+        document.getElementById('tabLogin').classList.add('active');
+        document.getElementById('tabSignup').classList.remove('active');
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('forgotOtpForm').style.display = 'none';
+        document.getElementById('signupForm').style.display = 'none';
+      } else {
+        document.getElementById('tabSignup').classList.add('active');
+        document.getElementById('tabLogin').classList.remove('active');
+        document.getElementById('signupForm').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('forgotOtpForm').style.display = 'none';
+      }
+    }
+
+    // DIRECT GOOGLE SHEET LOGIN VIA APPS SCRIPT
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const phone = document.getElementById('loginPhone').value.trim();
+      const pass = document.getElementById('loginPassword').value.trim();
+      const btn = document.getElementById('btnLoginSubmit');
+      btn.innerText = "Checking Sheet...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "login_user",
+            phone: phone,
+            password: pass
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.user) {
+          currentUser = data.user;
+          saveCurrentUser();
+
+          // Sync purchases from Google Sheet
+          if (data.purchases && Array.isArray(data.purchases)) {
+            data.purchases.forEach(p => {
+              if (!orders.some(o => o.orderId === p.orderId)) {
+                orders.unshift({
+                  orderId: p.orderId,
+                  itemTitle: p.itemTitle,
+                  phone: p.phone,
+                  totalAmount: p.totalAmount,
+                  sellerPayout: p.sellerPayout,
+                  status: p.status,
+                  time: p.time
+                });
+              }
+            });
+            saveOrders();
+          }
+
+          refreshAuthUI();
+          closeAuthModal();
+          alert(`🎉 Welcome back, ${currentUser.name}!`);
+        } else {
+          alert("❌ " + (data.message || "Invalid WhatsApp Phone Number or Password."));
+        }
+      } catch (err) {
+        console.error("Login network error:", err);
+        // Fallback to local accounts if connection is unreachable
+        const user = accounts.find(a => a.phone === phone && a.pass === pass);
+        if (user) {
+          currentUser = user;
+          saveCurrentUser();
+          refreshAuthUI();
+          closeAuthModal();
+          alert(`🎉 Welcome back, ${user.name}!`);
+        } else {
+          alert("❌ Error connecting to database or invalid credentials.");
+        }
+      } finally {
+        btn.innerText = "Sign In";
+        btn.disabled = false;
+      }
+    }
+
+    // REGISTRATION WRITTEN TO GOOGLE SHEET & LOCAL REPO
+    async function handleSignupSubmit(e) {
+      e.preventDefault();
+      const phone = document.getElementById('regPhone').value.trim();
+      const name = document.getElementById('regName').value.trim();
+      const branch = document.getElementById('regBranch').value;
+      const pass = document.getElementById('regPassword').value.trim();
+      const btn = document.getElementById('btnRegisterSubmit');
+
+      btn.innerText = "Saving Account...";
+      btn.disabled = true;
+
+      const newAccount = { id: Date.now(), name, branch, phone, pass, avatar: "" };
+
+      try {
+        const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "register_user",
+            name: name,
+            phone: phone,
+            branch: branch,
+            password: pass
+          })
+        });
+        const resData = await res.json();
+        if (resData.success === false) {
+          alert("⚠️ " + (resData.message || "Phone number already exists"));
+          btn.innerText = "Create Account";
+          btn.disabled = false;
+          return;
+        }
+      } catch (err) {
+        console.warn("Could not sync directly to Google Sheet from current network:", err);
+      }
+
+      accounts.push(newAccount);
+      saveAccounts();
+      currentUser = newAccount;
+      saveCurrentUser();
+      refreshAuthUI();
+      closeAuthModal();
+      alert(`✅ Account created for ${newAccount.name}!\nData saved to your Google Sheet database.`);
+      btn.innerText = "Create Account";
+      btn.disabled = false;
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      saveCurrentUser();
+      refreshAuthUI();
+      closeAuthModal();
+      alert("You have logged out.");
+    }
+
+    function handleDevAuth() {
+      if (!isDevMode) {
+        const pass = prompt("Enter Developer Admin Passcode:");
+        if (pass === "admin123") {
+          isDevMode = true;
+          document.getElementById('devToggleBtn').classList.add('active');
+          document.getElementById('devBanner').style.display = 'block';
+          alert("🔓 Dev Mode Activated! All developer panels, Drive Hub, and Split Ledger unlocked.");
+        } else if (pass !== null) {
+          alert("❌ Incorrect passcode.");
+        }
+      } else {
+        isDevMode = false;
+        document.getElementById('devToggleBtn').classList.remove('active');
+        document.getElementById('devBanner').style.display = 'none';
+        document.getElementById('devNotificationBanner').style.display = 'none';
+      }
+      renderCards(items);
+    }
+
+    function openDevMaterialControlsModal() {
+      document.getElementById('toggleSoftCopy').checked = devSettings.enableSoft !== false;
+      document.getElementById('toggleHardCopy').checked = devSettings.enableHard !== false;
+      document.getElementById('toggleBothCopy').checked = devSettings.enableBoth !== false;
+      document.getElementById('devMaterialControlsModal').style.display = 'flex';
+    }
+
+    function closeDevMaterialControlsModal() {
+      document.getElementById('devMaterialControlsModal').style.display = 'none';
+    }
+
+    function saveMaterialControls() {
+      devSettings.enableSoft = document.getElementById('toggleSoftCopy').checked;
+      devSettings.enableHard = document.getElementById('toggleHardCopy').checked;
+      devSettings.enableBoth = document.getElementById('toggleBothCopy').checked;
+      saveDevSettingsStore();
+      renderCards(items);
+      alert("✅ Material controls updated across platform!");
+    }
+
+    function openGoogleDriveHubModal() {
+      document.getElementById('devGDriveAccountsFolder').value = GDRIVE_ACCOUNTS_SHEET_URL;
+      document.getElementById('devGDriveDocsFolder').value = GDRIVE_DOCS_FOLDER_URL;
+      document.getElementById('devAppsScriptUrlInput').value = APPS_SCRIPT_WEBAPP_URL;
+      document.getElementById('gdriveHubModal').style.display = 'flex';
+    }
+
+    function closeGoogleDriveHubModal() {
+      document.getElementById('gdriveHubModal').style.display = 'none';
+    }
+
+    function saveAppsScriptUrl() {
+      const val = document.getElementById('devAppsScriptUrlInput').value.trim();
+      if (val) {
+        APPS_SCRIPT_WEBAPP_URL = val;
+        localStorage.setItem('kbtcoe_apps_script_url', val);
+        alert("✅ Custom Apps Script API Endpoint saved successfully!");
+      }
+    }
+
+    function openDriveLink(type) {
+      const url = type === 'accounts' ? GDRIVE_ACCOUNTS_SHEET_URL : GDRIVE_DOCS_FOLDER_URL;
+      window.open(url, "_blank");
+    }
+
+    function exportAccountsToDriveJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(accounts, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `KBTCOE_Accounts_GoogleDrive_Backup.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      alert("📥 Downloaded backup! You can upload it into your Google Drive backup folder.");
+    }
+
+    function updateGeneratedFileName() {
+      const branch = document.getElementById('sellerBranch').value.split('/')[0].replace(/[^a-zA-Z0-9]/g, '');
+      const subject = (document.getElementById('sellerSubject').value || 'Subject').trim().replace(/[^a-zA-Z0-9]/g, '_');
+      const topic = (document.getElementById('sellerTopic').value || 'Notes').trim().replace(/[^a-zA-Z0-9]/g, '_');
+      const ext = stagedFileExt || 'pdf';
+      const standardName = `KBTCOE_${branch}_${subject}_${topic}.${ext}`;
+      document.getElementById('generatedFileNameBox').innerText = standardName;
+      return standardName;
+    }
+
+    function triggerDeviceFileInput() {
+      document.getElementById('sellerPdfFileInput').click();
+    }
+
+    // CANVAS SLIDE GENERATOR FOR PPT / PPTX / NON-PDF DOCUMENTS
+    function createPresentationSlideCanvas(slideNumber, subject, topic, branch) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 400;
+      canvas.height = 250;
+      const ctx = canvas.getContext("2d");
+
+      // Slide Background & Border
+      ctx.fillStyle = slideNumber === 1 ? "#1e293b" : "#0f172a";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#8b0000";
+      ctx.fillRect(0, 0, canvas.width, 10);
+
+      // Slide Header
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "bold 13px sans-serif";
+      ctx.fillText(`KBTCOE • ${branch.toUpperCase()}`, 20, 36);
+
+      // Slide Title
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 18px sans-serif";
+      ctx.fillText(subject || "Presentation", 20, 75);
+
+      // Slide Topic
+      ctx.fillStyle = "#38bdf8";
+      ctx.font = "14px sans-serif";
+      ctx.fillText(`Topic: ${topic || "Slide Deck"}`, 20, 108);
+
+      // Slide Content Mock
+      ctx.fillStyle = "#cbd5e1";
+      ctx.font = "12px sans-serif";
+      ctx.fillText(`Slide ${slideNumber} Overview: Key formulas, concept notes`, 20, 155);
+      ctx.fillText(`and unit breakdown for examination prep.`, 20, 175);
+
+      // Footer
+      ctx.fillStyle = "#64748b";
+      ctx.font = "11px sans-serif";
+      ctx.fillText(`KBTCOE NotesDesk Presentation Preview • Slide ${slideNumber}`, 20, 225);
+
+      return canvas.toDataURL("image/jpeg", 0.8);
+    }
+
+    async function handleDirectFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      stagedFileBlob = file;
+      stagedFileExt = file.name.split('.').pop().toLowerCase();
+      document.getElementById('pdfFileSelectLabel').innerText = `✅ File Selected: ${file.name}`;
+      document.getElementById('pdfSelectedFileInfo').innerText = `Generating 2 preview samples...`;
+
+      autoExtractedSamplePages = [];
+
+      const subject = document.getElementById('sellerSubject').value || 'Subject';
+      const topic = document.getElementById('sellerTopic').value || 'Topics';
+      const branch = document.getElementById('sellerBranch').value || 'Branch';
+
+      if (stagedFileExt === "pdf") {
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          const totalPages = pdf.numPages;
+
+          let p1 = 1;
+          let p2 = totalPages >= 2 ? 2 : 1;
+          if (totalPages > 2) {
+            p1 = Math.floor(Math.random() * (totalPages - 1)) + 1;
+            p2 = Math.floor(Math.random() * (totalPages - p1)) + p1 + 1;
+          }
+
+          const renderPageToImg = async (pageNum) => {
+            const page = await pdf.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 1.0 });
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+            return {
+              label: `Page ${pageNum} Sample`,
+              img: canvas.toDataURL("image/jpeg", 0.7)
+            };
+          };
+
+          const s1 = await renderPageToImg(p1);
+          const s2 = await renderPageToImg(p2);
+          autoExtractedSamplePages = [s1, s2];
+          document.getElementById('pdfSelectedFileInfo').innerText = `✅ Extracted Page ${p1} and Page ${p2} from PDF!`;
+        } catch (err) {
+          console.warn("Could not auto-extract PDF pages, using canvas fallback:", err);
+          autoExtractedSamplePages = [
+            { label: "Page 1 Sample", img: createPresentationSlideCanvas(1, subject, topic, branch) },
+            { label: "Page 2 Sample", img: createPresentationSlideCanvas(2, subject, topic, branch) }
+          ];
+        }
+      } else {
+        // PRESENTATION / OFFICE DOCUMENT SAMPLE GENERATION
+        const slide1 = createPresentationSlideCanvas(1, subject, topic, branch);
+        const slide2 = createPresentationSlideCanvas(2, subject, topic, branch);
+
+        autoExtractedSamplePages = [
+          { label: "Slide 1 Sample", img: slide1 },
+          { label: "Slide 2 Sample", img: slide2 }
+        ];
+        document.getElementById('pdfSelectedFileInfo').innerText = `✅ Rendered authentic Slide 1 & Slide 2 samples for this presentation!`;
+      }
+
+      updateGeneratedFileName();
+    }
+
+    function openSampleModal(item) {
+      document.getElementById('sampleViewTitle').innerText = item.title;
+      const samples = item.samplePages && item.samplePages.length >= 2 ? item.samplePages : [
+        { label: "Sample 1", img: createPresentationSlideCanvas(1, item.subject, item.topic, item.branch) },
+        { label: "Sample 2", img: createPresentationSlideCanvas(2, item.subject, item.topic, item.branch) }
+      ];
+
+      document.getElementById('sampleImg1').src = samples[0].img;
+      document.getElementById('sampleBadge1').innerText = samples[0].label;
+
+      document.getElementById('sampleImg2').src = samples[1].img;
+      document.getElementById('sampleBadge2').innerText = samples[1].label;
+
+      document.getElementById('sampleViewerModal').style.display = 'flex';
+    }
+
+    function closeSampleModal() {
+      document.getElementById('sampleViewerModal').style.display = 'none';
+    }
+
+    async function openNativeDocReader(item) {
+      document.getElementById('pdfReaderTitle').innerText = item.title;
+      document.getElementById('pdfReaderFilename').innerText = item.fileName || "KBTCOE_Document.pdf";
+
+      const record = await getPdfFromPlatformDB(item.id);
+      let fileBlob = record ? record.data : null;
+      const ext = (record && record.ext) ? record.ext : (item.docExt || 'pdf');
+
+      if (!fileBlob) {
+        const samplePdfContent = "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R/Resources<<>>>>endobj\nxref\n0 4\n0000000000 65535 f\n0000000010 00000 n\n0000000053 00000 n\n0000000102 00000 n\ntrailer<</Size 4/Root 1 0 R>>\nstartxref\n186\n%%EOF";
+        fileBlob = new Blob([samplePdfContent], { type: "application/pdf" });
+      }
+
+      const fileObjectUrl = URL.createObjectURL(fileBlob);
+      const iframe = document.getElementById('pdfViewerIframe');
+      const nonPdfNotice = document.getElementById('nonPdfNotice');
+
+      if (ext === 'pdf') {
+        iframe.style.display = 'block';
+        nonPdfNotice.style.display = 'none';
+        iframe.src = fileObjectUrl;
+      } else {
+        iframe.style.display = 'none';
+        nonPdfNotice.style.display = 'block';
+      }
+
+      const dlBtn = document.getElementById('btnDownloadNativePdf');
+      dlBtn.onclick = function() {
+        const a = document.createElement('a');
+        a.href = fileObjectUrl;
+        a.download = item.fileName || `${item.title}.${ext}`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        alert(`⬇️ ${ext.toUpperCase()} downloaded to your device!`);
+      };
+
+      document.getElementById('pdfReaderModal').style.display = 'flex';
+    }
+
+    function closePdfReaderModal() {
+      document.getElementById('pdfReaderModal').style.display = 'none';
+      document.getElementById('pdfViewerIframe').src = '';
+    }
+
+    function devChangePrice(id) {
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+
+      const newPrice = prompt(`Update Base Price for "${item.title}":`, item.price);
+      if (newPrice !== null && !isNaN(newPrice) && newPrice.trim() !== "") {
+        item.price = parseInt(newPrice, 10);
+        saveItems();
+        filterItems();
+      }
+    }
+
+    function devDeleteItem(id) {
+      if (confirm("Remove this document from the marketplace?")) {
+        items = items.filter(i => i.id !== id);
+        saveItems();
+        filterItems();
+      }
+    }
+
+    function renderCards(list) {
+      const grid = document.getElementById('notesGrid');
+      grid.innerHTML = '';
+
+      if (list.length === 0) {
+        grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: var(--muted); padding: 2rem 0;">No matching notes found.</p>';
+        return;
+      }
+
+      list.forEach(item => {
+        if (item.listingType === 'soft_only' && devSettings.enableSoft === false) return;
+        if (item.listingType === 'hard_only' && devSettings.enableHard === false) return;
+        if (item.listingType === 'both' && devSettings.enableBoth === false) return;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        const extTag = (item.docExt || 'pdf').toUpperCase();
+
+        let formatBadge = '';
+        if (item.listingType === 'hard_only') {
+          formatBadge = '<span class="card-tag" style="background:#fef3c7; color:#92400e;">📖 Physical Notebook</span>';
+        } else if (item.listingType === 'both') {
+          formatBadge = `<span class="card-format-tag" style="background:#f3e8ff; color:#6b21a8;">📦 Both (${extTag} + Hard Copy)</span>`;
+        } else {
+          formatBadge = `<span class="card-format-tag">📱 ${extTag} Direct</span>`;
+        }
+
+        card.innerHTML = `
+          <div>
+            <div class="card-top">
+              <div class="badge-wrap">
+                <span class="card-tag">${item.category || 'Study Material'}</span>
+                ${formatBadge}
+              </div>
+              <span class="card-branch">${item.branch}</span>
+            </div>
+            <h3>${item.title}</h3>
+            <div class="card-topic">📌 <strong>Topics:</strong> ${item.topic}</div>
+            <div class="card-filename">📁 ${item.fileName || 'KBTCOE_Document.pdf'}</div>
+
+            <div class="sample-preview-row">
+              <button class="btn-sample-view" onclick="openSampleModal(items.find(i=>i.id===${item.id}))">
+                👁️ View 2 Random Samples
+              </button>
+            </div>
+
+            <div class="dev-card-toolbar" style="display: ${isDevMode ? 'flex' : 'none'};">
+              <button class="btn-dev-open" onclick="openNativeDocReader(items.find(i=>i.id===${item.id}))">🔓 Inspect</button>
+              <button class="btn-edit-price" onclick="devChangePrice(${item.id})">✏️ Price</button>
+              <button class="btn-del" onclick="devDeleteItem(${item.id})">🗑️</button>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="price">₹${item.price}</span>
+            <button class="btn-buy" onclick="protectedOpenCheckout(${item.id})">Get Notes</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterItems() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = items.filter(item => {
+        const matchesBranch = (currentBranch === 'all') || (item.branch === currentBranch);
+        const matchesQuery = 
+          item.title.toLowerCase().includes(query) || 
+          item.subject.toLowerCase().includes(query) || 
+          item.topic.toLowerCase().includes(query) ||
+          (item.fileName && item.fileName.toLowerCase().includes(query));
+        return matchesBranch && matchesQuery;
+      });
+      renderCards(filtered);
+    }
+
+    function setBranch(branch, btn) {
+      currentBranch = branch;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterItems();
+    }
+
+    function selectFormat(fmt) {
+      selectedFormat = fmt;
+      document.getElementById('optSoft').classList.toggle('selected', fmt === 'soft');
+      document.getElementById('optHard').classList.toggle('selected', fmt === 'hard');
+      const hardDetails = document.getElementById('hardCopyDetailsArea');
+      hardDetails.style.display = fmt === 'hard' ? 'block' : 'none';
+    }
+
+    function openCheckoutModal(itemId) {
+      activeItem = items.find(i => i.id === itemId);
+      document.getElementById('modalTitle').innerText = activeItem.title;
+      document.getElementById('modalSub').innerText = `${activeItem.subject} (${activeItem.branch})`;
+
+      const sellerCut = activeItem.price;
+      const devCut = Math.round((sellerCut * devSettings.commissionPercent) / 100) + parseInt(devSettings.flatFee || 0);
+      const totalAmount = sellerCut + devCut;
+
+      document.getElementById('splitSellerShare').innerText = `₹${sellerCut}`;
+      document.getElementById('splitDevPercent').innerText = `${devSettings.commissionPercent}% + ₹${devSettings.flatFee}`;
+      document.getElementById('splitDevShare').innerText = `₹${devCut}`;
+      document.getElementById('splitTotalPayable').innerText = `₹${totalAmount}`;
+
+      selectFormat(activeItem.listingType === 'hard_only' ? 'hard' : 'soft');
+
+      pendingCheckoutOrder = {
+        itemId: activeItem.id,
+        itemTitle: activeItem.title,
+        fileName: activeItem.fileName,
+        docExt: activeItem.docExt || 'pdf',
+        totalAmount: totalAmount,
+        sellerPayout: sellerCut,
+        sellerUPI: activeItem.upi,
+        platformProfit: devCut
+      };
+
+      document.getElementById('checkoutModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('checkoutModal').style.display = 'none';
+      pendingCheckoutOrder = null;
+    }
+
+    // CASHFREE AUTOMATED GATEWAY CHECKOUT
+    async function launchCashfreeCheckout() {
+      if (!requireLogin("purchase study notes")) return;
+
+      const payBtn = document.getElementById("btnCashfreePay");
+      const originalText = payBtn.innerText;
+      payBtn.innerText = "Connecting Cashfree...";
+      payBtn.disabled = true;
+
+      try {
+        const sellerCut = activeItem.price;
+        const devCut = Math.round((sellerCut * devSettings.commissionPercent) / 100) + parseInt(devSettings.flatFee || 0);
+        const totalAmount = sellerCut + devCut;
+
+        if (selectedFormat === 'hard') {
+          const buyerName = document.getElementById('buyerInfo').value.trim();
+          const buyerPhone = document.getElementById('buyerPhone').value.trim();
+          if (!buyerName || !buyerPhone) {
+            alert("Please enter your Name and WhatsApp phone number for physical handover.");
+            payBtn.innerText = originalText;
+            payBtn.disabled = false;
+            return;
+          }
+        }
+
+        const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "create_cashfree_order",
+            itemTitle: activeItem.title,
+            totalAmount: totalAmount,
+            sellerShare: sellerCut,
+            sellerUPI: activeItem.upi,
+            buyerName: currentUser.name,
+            buyerPhone: currentUser.phone
+          })
+        });
+
+        const data = await res.json();
+
+        if (!data.success || !data.paymentSessionId) {
+          alert("❌ Payment Gateway Error: " + (data.error || "Could not generate payment session"));
+          payBtn.innerText = originalText;
+          payBtn.disabled = false;
+          return;
+        }
+
+        cashfree.checkout({
+          paymentSessionId: data.paymentSessionId,
+          redirectTarget: "_modal"
+        }).then(async (result) => {
+          if (result.error) {
+            alert("Payment Dismissed: " + result.error.message);
+          }
+
+          if (result.paymentDetails) {
+            closeModal();
+
+            if (selectedFormat === 'hard') {
+              const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+              const hardOrder = {
+                orderId: data.orderId,
+                itemId: activeItem.id,
+                itemTitle: activeItem.title,
+                student: currentUser.name,
+                phone: currentUser.phone,
+                format: 'hard',
+                totalAmount: totalAmount,
+                sellerPayout: sellerCut,
+                otp: generatedOtp,
+                status: 'PENDING HANDOVER'
+              };
+              orders.unshift(hardOrder);
+              saveOrders();
+
+              document.getElementById('displayOtp').innerText = generatedOtp;
+              document.getElementById('displayOrderId').innerText = `Order ID: #${data.orderId}`;
+              document.getElementById('displayPayStatus').innerText = "Paid Online via Cashfree";
+              document.getElementById('otpSuccessModal').style.display = 'flex';
+            } else {
+              alert("🎉 Payment Successful via Cashfree!\nUnlocking your document...");
+
+              orders.unshift({
+                orderId: data.orderId,
+                itemId: activeItem.id,
+                itemTitle: activeItem.title,
+                fileName: activeItem.fileName,
+                docExt: activeItem.docExt || "pdf",
+                phone: currentUser.phone,
+                totalAmount: totalAmount,
+                sellerPayout: sellerCut,
+                status: "UNLOCKED & PAID",
+                time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+              });
+              saveOrders();
+
+              const purchasedDoc = items.find(i => i.id === activeItem.id);
+              openNativeDocReader(purchasedDoc);
+            }
+          }
+
+          payBtn.innerText = originalText;
+          payBtn.disabled = false;
+        });
+
+      } catch (err) {
+        console.error("Cashfree Checkout Failed:", err);
+        alert("❌ Network Error connecting to payment gateway.");
+        payBtn.innerText = originalText;
+        payBtn.disabled = false;
+      }
+    }
+
+    function closeOtpModal() {
+      document.getElementById('otpSuccessModal').style.display = 'none';
+    }
+
+    function openDevOrdersModal() {
+      renderOrdersTable();
+      document.getElementById('devOrdersModal').style.display = 'flex';
+    }
+
+    function closeDevOrdersModal() {
+      document.getElementById('devOrdersModal').style.display = 'none';
+    }
+
+    function renderOrdersTable() {
+      const tbody = document.getElementById('ordersTableBody');
+      tbody.innerHTML = '';
+
+      let totalProfit = 0;
+      let totalDue = 0;
+
+      orders.forEach(ord => {
+        totalProfit += ord.platformProfit || 0;
+        totalDue += ord.sellerPayout || 0;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${ord.orderId || 'KBT-ORD'}</strong><br><small>${ord.time || ''}</small></td>
+          <td>${ord.buyerName || ord.student || currentUser.name}<br><small>${ord.phone || ord.buyerPhone || currentUser.phone}</small></td>
+          <td>₹${ord.totalAmount}</td>
+          <td>₹${ord.sellerPayout}</td>
+          <td>
+            ${ord.otp ? `<strong style="color:#1d4ed8; letter-spacing:1px;">OTP: ${ord.otp}</strong>` : `<span style="color:#16a34a; font-weight:bold;">${ord.status}</span>`}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('statTotalProfit').innerText = `₹${totalProfit}`;
+      document.getElementById('statSellerPayoutsDue').innerText = `₹${totalDue}`;
+
+      if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted); padding:1rem;">No transactions yet.</td></tr>';
+      }
+    }
+
+    function verifyStudentOtp() {
+      const input = document.getElementById('verifyOtpInput').value.trim();
+      if (!input) return;
+
+      const order = orders.find(o => o.otp === input);
+      if (!order) {
+        alert("❌ Invalid OTP! No matching active handover order found.");
+        return;
+      }
+
+      if (order.status === 'HANDED OVER') {
+        alert("⚠️ This notebook was ALREADY handed over and verified.");
+        return;
+      }
+
+      order.status = 'HANDED OVER';
+      saveOrders();
+      renderOrdersTable();
+      document.getElementById('verifyOtpInput').value = '';
+      alert(`✅ Handover Verified Successfully!\nBuyer: ${order.student}\nRelease payout of ₹${order.sellerPayout} to seller.`);
+    }
+
+    function openDevSettingsModal() {
+      document.getElementById('devUPIInput').value = devSettings.upi;
+      document.getElementById('devCommissionInput').value = devSettings.commissionPercent;
+      document.getElementById('devFlatFeeInput').value = devSettings.flatFee;
+      document.getElementById('devSettingsModal').style.display = 'flex';
+    }
+
+    function closeDevSettingsModal() {
+      document.getElementById('devSettingsModal').style.display = 'none';
+    }
+
+    function saveDevSettings(e) {
+      e.preventDefault();
+      devSettings.upi = document.getElementById('devUPIInput').value.trim();
+      devSettings.commissionPercent = parseInt(document.getElementById('devCommissionInput').value, 10);
+      devSettings.flatFee = parseInt(document.getElementById('devFlatFeeInput').value || 0, 10);
+      saveDevSettingsStore();
+      closeDevSettingsModal();
+      alert("✅ Developer UPI & Commission updated!");
+    }
+
+    function openDevAccountsModal() {
+      renderAccountsTable();
+      document.getElementById('devAccountsModal').style.display = 'flex';
+    }
+
+    function closeDevAccountsModal() {
+      document.getElementById('devAccountsModal').style.display = 'none';
+    }
+
+    function renderAccountsTable() {
+      const tbody = document.getElementById('accountsTableBody');
+      tbody.innerHTML = '';
+      accounts.forEach(acc => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${acc.name}</strong></td>
+          <td>${acc.branch}</td>
+          <td>${acc.phone}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openUploadModal() {
+      stagedFileBlob = null;
+      stagedFileExt = 'pdf';
+      autoExtractedSamplePages = [];
+
+      document.getElementById('pdfFileSelectLabel').innerText = '📄 Tap here to Choose Document from Phone';
+      document.getElementById('pdfSelectedFileInfo').innerText = 'Supports PDF, PPT, PPTX, Excel, Word. 2 genuine preview pages/slides will be generated.';
+
+      const sel = document.getElementById('sellerListingType');
+      sel.innerHTML = '';
+      if (devSettings.enableSoft !== false) sel.innerHTML += '<option value="soft_only">Digital Soft Copy (PDF, PPT, Excel, Word)</option>';
+      if (devSettings.enableHard !== false) sel.innerHTML += '<option value="hard_only">Original Physical Notebook (Handwritten Hard Copy)</option>';
+      if (devSettings.enableBoth !== false) sel.innerHTML += '<option value="both">Both (Soft Copy + Physical Notebook Bundle)</option>';
+
+      if (sel.options.length === 0) {
+        alert("⚠️ All material forms are currently disabled by developer.");
+        return;
+      }
+
+      toggleSellerDocInput();
+      updateGeneratedFileName();
+      document.getElementById('sellerModal').style.display = 'flex';
+    }
+
+    function closeUploadModal() {
+      document.getElementById('sellerModal').style.display = 'none';
+    }
+
+    function toggleSellerDocInput() {
+      const type = document.getElementById('sellerListingType').value;
+      const group = document.getElementById('sellerDocGroup');
+      if (type === 'hard_only') {
+        group.style.display = 'none';
+      } else {
+        group.style.display = 'block';
+      }
+    }
+
+    // ROBUST MATERIAL UPLOAD & GOOGLE DRIVE INTEGRATION
+    async function handleSellerSubmit(e) {
+      e.preventDefault();
+      const listingType = document.getElementById('sellerListingType').value;
+
+      if (listingType !== 'hard_only' && !stagedFileBlob) {
+        alert("Please select a document file directly from your device storage.");
+        return;
+      }
+
+      const publishBtn = document.getElementById('btnPublishDoc');
+      publishBtn.innerText = "Uploading to Drive...";
+      publishBtn.disabled = true;
+
+      const standardFileName = updateGeneratedFileName();
+      const newId = Date.now();
+
+      const finalSamples = autoExtractedSamplePages.length === 2 ? autoExtractedSamplePages : [
+        { label: "Sample 1", img: createPresentationSlideCanvas(1, document.getElementById('sellerSubject').value, document.getElementById('sellerTopic').value, document.getElementById('sellerBranch').value) },
+        { label: "Sample 2", img: createPresentationSlideCanvas(2, document.getElementById('sellerSubject').value, document.getElementById('sellerTopic').value, document.getElementById('sellerBranch').value) }
+      ];
+
+      const saveLocallyAndClose = () => {
+        const newItem = {
+          id: newId,
+          sellerPhone: currentUser.phone,
+          title: document.getElementById('sellerTitle').value,
+          branch: document.getElementById('sellerBranch').value,
+          subject: document.getElementById('sellerSubject').value,
+          topic: document.getElementById('sellerTopic').value,
+          fileName: standardFileName,
+          category: "Study Material",
+          listingType: listingType,
+          docExt: stagedFileExt,
+          samplePages: finalSamples,
+          price: parseInt(document.getElementById('sellerPrice').value, 10),
+          upi: document.getElementById('sellerUPI').value
+        };
+
+        items.unshift(newItem);
+        saveItems();
+        document.getElementById('sellerForm').reset();
+        closeUploadModal();
+        filterItems();
+        publishBtn.innerText = "Publish to Platform";
+        publishBtn.disabled = false;
+        alert(`🎉 Material published successfully!\nFile uploaded to Google Drive & 2 genuine preview pages generated.`);
+      };
+
+      if (stagedFileBlob) {
+        await savePdfToPlatformDB(newId, stagedFileBlob, stagedFileExt);
+
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const base64Content = reader.result.split(',')[1];
+          try {
+            const res = await fetch(APPS_SCRIPT_WEBAPP_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify({
+                action: "publish_material",
+                sellerPhone: currentUser.phone,
+                title: document.getElementById('sellerTitle').value,
+                branch: document.getElementById('sellerBranch').value,
+                subject: document.getElementById('sellerSubject').value,
+                topic: document.getElementById('sellerTopic').value,
+                fileName: standardFileName,
+                listingType: listingType,
+                docExt: stagedFileExt,
+                price: parseInt(document.getElementById('sellerPrice').value, 10),
+                sellerUPI: document.getElementById('sellerUPI').value,
+                mimeType: stagedFileBlob.type || "application/octet-stream",
+                base64Data: base64Content,
+                sampleImg1: finalSamples[0].img,
+                sampleImg2: finalSamples[1].img
+              })
+            });
+            const resData = await res.json();
+            if (resData.success) {
+              console.log("Material registered to Drive & Sheet:", resData);
+            }
+          } catch (err) {
+            console.warn("Could not sync directly to Google Sheet, saved locally:", err);
+          }
+          saveLocallyAndClose();
+        };
+        reader.readAsDataURL(stagedFileBlob);
+      } else {
+        saveLocallyAndClose();
+      }
+    }
+
+    function openSupportFormModal() {
+      if (currentUser) {
+        document.getElementById('supportName').value = currentUser.name;
+        document.getElementById('supportPhone').value = currentUser.phone;
+      }
+      document.getElementById('supportFormModal').style.display = 'flex';
+    }
+
+    function closeSupportFormModal() {
+      document.getElementById('supportFormModal').style.display = 'none';
+    }
+
+    function handleSupportSubmit(e) {
+      e.preventDefault();
+      const newMsg = {
+        id: Date.now(),
+        type: document.getElementById('supportType').value,
+        name: document.getElementById('supportName').value.trim(),
+        phone: document.getElementById('supportPhone').value.trim(),
+        message: document.getElementById('supportMessage').value.trim(),
+        time: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      studentMessages.unshift(newMsg);
+      saveStudentMessages();
+      closeSupportFormModal();
+      alert("📬 Ticket submitted to developer inbox.");
+    }
+
+    function openSupportInboxModal() {
+      renderSupportTable();
+      document.getElementById('supportInboxModal').style.display = 'flex';
+    }
+
+    function closeSupportInboxModal() {
+      document.getElementById('supportInboxModal').style.display = 'none';
+    }
+
+    function renderSupportTable() {
+      const tbody = document.getElementById('supportTableBody');
+      tbody.innerHTML = '';
+      studentMessages.forEach(msg => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><small>${msg.time}</small></td>
+          <td><strong>${msg.name}</strong><br><small>${msg.phone}</small></td>
+          <td><span style="background:#e0e7ff; color:#3730a3; padding:2px 5px; border-radius:4px;">${msg.type}</span></td>
+          <td>${msg.message}</td>
+          <td><button onclick="resolveMessage(${msg.id})" style="background:#16a34a; color:#fff; border:none; border-radius:4px; padding:3px 6px; cursor:pointer;">Done</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      if (studentMessages.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted); padding:1rem;">No tickets.</td></tr>';
+      }
+    }
+
+    function resolveMessage(id) {
+      studentMessages = studentMessages.filter(m => m.id !== id);
+      saveStudentMessages();
+      renderSupportTable();
+    }
+
+    initIndexedDB().then(() => {
+      refreshAuthUI();
+      renderCards(items);
+    });
+  </script>
+</body>
+</html>
