@@ -107,6 +107,8 @@
       cursor: pointer;
     }
 
+
+
     /* Integrated Custom Image Logo */
     .brand-logo-img {
       height: 48px;
@@ -115,6 +117,20 @@
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       mix-blend-mode: multiply; /* Helps blend light image backgrounds seamlessly */
     }
+
+        <div class="logo-container" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+  <img 
+    src="https://raw.githubusercontent.com/Spady97/KBTCOE-NotesDesk/main/frontend/Gemini_Generated_Image_1cc5vu1cc5vu1cc5.png" 
+    alt="NotesDesk Logo" 
+    class="brand-logo-mark" 
+    style="width: 46px; height: 46px; object-fit: contain;"
+    onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Notes+Desk&background=1b4332&color=fed7aa&rounded=true&bold=true&size=48';"
+  />
+  <div class="logo-text-group">
+    <div class="logo-title" style="font-family: 'Playfair Display', serif;">Notes<span>Desk</span></div>
+    <div class="sub-brand" style="font-family: 'Plus Jakarta Sans', sans-serif;">Academic Notes & Resource Marketplace</div>
+  </div>
+</div>
 
     .logo-container:hover .brand-logo-img {
       transform: scale(1.06) rotate(-1deg);
