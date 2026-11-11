@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NotesDesk | Premium Study Resource Marketplace</title>
+
+  <!-- Premium Typography: Playfair Display (Headings) & Plus Jakarta Sans (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- PDF.js library for on-device automatic random 2-page extraction -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  </script>
+
+  <!-- Official Cashfree PG JS SDK v3 for automated UPI / Gateway checkout -->
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
+  <style>
+    :root {
+      /* Deep Emerald and Gold Premium Palette */
+      --emerald-dark: #022c22;
+      --emerald-primary: #064e3b;
+      --emerald-medium: #047857;
+      --emerald-light: #10b981;
+      --emerald-soft: #ecfdf5;
+      
+      --gold-accent: #d97706;
+      --gold-hover: #b45309;
+      --gold-soft: #fef3c7;
+      --gold-border: #fde68a;
+
+      --bg: #fafaf9; 
+      --card-bg: #ffffff;
+      --text: #1c1917;
+      --muted: #57534e;
+      --border: #e7e5e4;
+      --radius: 16px;
+      
+      /* Refined, softer luxury shadows */
+      --shadow-sm: 0 4px 12px rgba(2, 44, 34, 0.04);
+      --shadow-md: 0 12px 32px rgba(2, 44, 34, 0.08);
+      --shadow-lg: 0 24px 48px rgba(2, 44, 34, 0.12);
+      
+      /* Smooth, elegant transition timing */
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    h1, h2, h3, .logo-title, .price {
+      font-family: 'Playfair Display', serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding-bottom: 90px;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Top Strip */
+    .top-college-strip {
+      background: var(--emerald-dark);
+      color: #d1fae5;
+      font-size: 0.72rem;
+      padding: 8px 1rem;
+      text-align: center;
+      letter-spacing: 1px;
+      font-weight: 600;
+      text-transform: uppercase;
+      animation: slideDownFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Header */
+    header {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 1.4rem;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .brand-logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      mix-blend-mode: multiply; 
+    }
+
+    .logo-container:hover .brand-logo-img {
+      transform: scale(1.06) rotate(-1deg);
+    }
+
+    .logo-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-title {
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.2px;
+      line-height: 1.1;
+      color: var(--emerald-primary);
+    }
+
+    .logo-title span {
+      color: var(--gold-accent);
+      font-style: italic;
+    }
+
+    .sub-brand {
+      font-size: 0.65rem;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .auth-badge-btn {
+      background: #ffffff;
+      color: var(--emerald-primary);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .auth-badge-btn:hover {
+      border-color: var(--emerald-light);
+      background: var(--emerald-soft);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(6, 78, 59, 0.08);
+    }
+
+    .header-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: none;
+      border: 1.5px solid var(--emerald-light);
+    }
+
+    .dev-toggle-btn {
+      background: #ffffff;
+      color: var(--emerald-primary);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .dev-toggle-btn.active {
+      background: var(--emerald-primary);
+      color: #ffffff;
+      border-color: var(--emerald-primary);
+      box-shadow: 0 4px 12px rgba(6, 78, 59, 0.25);
+    }
+
+    .upload-btn {
+      background: linear-gradient(135deg, var(--gold-accent), var(--gold-hover));
+      color: #ffffff;
+      border: none;
+      padding: 9px 20px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 6px 16px rgba(217, 119, 6, 0.25);
+    }
+
+    .upload-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(217, 119, 6, 0.35);
+    }
+
+    .dev-banner {
+      display: none;
+      background: var(--emerald-soft);
+      border-bottom: 1px solid #a7f3d0;
+      color: var(--emerald-dark);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 10px 1.2rem;
+      text-align: center;
+      animation: slideDownFade 0.4s ease;
+    }
+
+    .dev-btn {
+      background: var(--emerald-primary);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      margin: 2px 4px;
+      cursor: pointer;
+      font-size: 0.74rem;
+      font-weight: 700;
+      transition: var(--transition);
+    }
+
+    .dev-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .dev-notification-banner {
+      display: none;
+      background: var(--emerald-dark);
+      color: #34d399;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 10px 1.2rem;
+      text-align: center;
+      border-bottom: 2px solid var(--emerald-light);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 3.5rem 1.2rem 2.5rem;
+      text-align: center;
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+      animation: fadeUpIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--emerald-soft);
+      color: var(--emerald-primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+      border: 1px solid #a7f3d0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--emerald-dark);
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero h1 span {
+      color: var(--gold-accent);
+      font-style: italic;
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 1.8rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .search-box {
+      max-width: 580px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 14px 24px 14px 48px;
+      border-radius: 30px;
+      border: 1.5px solid var(--border);
+      background: #ffffff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-box input:focus {
+      border-color: var(--emerald-medium);
+      box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.1);
+    }
+
+    .search-box-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    /* Branch Filters */
+    .filters {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 1rem 1.2rem;
+      max-width: 860px;
+      margin: 0 auto;
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+
+    .filter-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--muted);
+      transition: var(--transition);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--emerald-light);
+      color: var(--emerald-primary);
+      transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+      background: var(--emerald-primary);
+      color: #ffffff;
+      border-color: var(--emerald-primary);
+      box-shadow: 0 4px 12px rgba(6, 78, 59, 0.2);
+    }
+
+    /* Container & Cards */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 1.5rem 1.2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 600px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      animation: cardAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 0.4s; }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: #a7f3d0;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .badge-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .card-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--gold-hover);
+      background: var(--gold-soft);
+      border: 1px solid var(--gold-border);
+      padding: 3px 10px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-format-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 8px;
+      background: var(--emerald-soft);
+      color: var(--emerald-primary);
+      border: 1px solid #a7f3d0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-branch {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      background: #f5f5f4;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      color: var(--emerald-dark);
+    }
+
+    .card-topic {
+      font-size: 0.85rem;
+      color: #44403c;
+      margin-bottom: 12px;
+      background: #fafaf9;
+      border-left: 3px solid var(--gold-accent);
+      padding: 8px 12px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .card-filename {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      margin-bottom: 12px;
+      background: #f5f5f4;
+      padding: 4px 10px;
+      border-radius: 8px;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+
+    .sample-preview-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .btn-sample-view {
+      background: var(--emerald-soft);
+      border: 1px solid #a7f3d0;
+      color: var(--emerald-primary);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .btn-sample-view:hover {
+      background: var(--emerald-medium);
+      color: #ffffff;
+      border-color: var(--emerald-medium);
+      transform: translateY(-2px);
+    }
+
+    .dev-card-toolbar {
+      display: none;
+      background: #f0fdf4;
+      border: 1px dashed var(--emerald-light);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      font-size: 0.75rem;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .dev-card-toolbar button {
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-edit-price { background: #0284c7; color: white; }
+    .btn-del { background: #e11d48; color: white; }
+    .btn-dev-open { background: var(--emerald-primary); color: white; }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      margin-top: auto;
+    }
+
+    .price {
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: var(--emerald-dark);
+    }
+
+    .btn-buy {
+      background: linear-gradient(135deg, var(--emerald-primary), var(--emerald-medium));
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(6, 78, 59, 0.2);
+    }
+
+    .btn-buy:hover {
+      background: linear-gradient(135deg, var(--emerald-medium), var(--emerald-primary));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(6, 78, 59, 0.3);
+    }
+
+    /* Modals with Premium Transitions */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 44, 34, 0.6);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 60;
+      overflow-y: auto;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      border-radius: var(--radius);
+      padding: 2rem;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+      animation: modalZoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-close-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #f5f5f4;
+      border: 1px solid var(--border);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-weight: bold;
+      transition: var(--transition);
+    }
+
+    .modal-close-icon:hover {
+      background: #e7e5e4;
+      color: var(--text);
+      transform: rotate(90deg) scale(1.1);
+    }
+
+    .form-group {
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--emerald-dark);
+      margin-bottom: 6px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+      background: #ffffff;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--emerald-medium);
+      box-shadow: 0 0 0 4px rgba(4, 120, 87, 0.1);
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .device-file-box {
+      border: 2px dashed var(--emerald-light);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      background: var(--emerald-soft);
+      cursor: pointer;
+      display: block;
+      margin-top: 6px;
+      transition: var(--transition);
+    }
+
+    .device-file-box:hover {
+      background: #d1fae5;
+      border-color: var(--emerald-medium);
+      transform: translateY(-2px);
+    }
+
+    .device-file-box input[type="file"] { display: none; }
+
+    .avatar-preview-circle {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: #e7e5e4;
+      border: 3px solid var(--emerald-medium);
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 1.8rem;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      background: #f5f5f4;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+      background: #e7e5e4;
+      color: var(--text);
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: linear-gradient(135deg, var(--emerald-primary), var(--emerald-medium));
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(6, 78, 59, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(6, 78, 59, 0.3);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-accent), var(--gold-hover)) !important;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25) !important;
+    }
+
+    .btn-gold:hover {
+      box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35) !important;
+    }
+
+    /* Social & Divider Styles */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1.5rem 0;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border);
+    }
+    .auth-divider::before { margin-right: .5em; }
+    .auth-divider::after { margin-left: .5em; }
+
+    .social-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text);
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: var(--transition);
+    }
+    
+    .social-btn img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    .social-btn:hover {
+      background: var(--bg);
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .social-btn.google { color: #3f3f46; }
+    .social-btn.facebook { color: #1877F2; border-color: #1877F2; background: #f0f7ff; }
+    .social-btn.twitter { color: #000000; border-color: #000000; background: #f8f9fa; }
+
+    /* Elegant Sliding Tabs */
+    .auth-tabs, .profile-tabs {
+      position: relative;
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .auth-tab, .profile-tab-btn {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--muted);
+      background: transparent;
+      border: none;
+      position: relative;
+      transition: color 0.4s ease;
+    }
+    
+    .auth-tab::after, .profile-tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--emerald-primary);
+      transform: scaleX(0);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .auth-tab.active, .profile-tab-btn.active {
+      color: var(--emerald-primary);
+    }
+
+    .auth-tab.active::after, .profile-tab-btn.active::after {
+      transform: scaleX(1);
+    }
+
+    #loginForm, #signupForm, #registrationOtpForm, #forgotOtpForm, #purchasedListContainer, #listedListContainer {
+      animation: fadeInSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .inventory-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: #fafaf9;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      transition: var(--transition);
+    }
+    
+    .inventory-item:hover {
+      border-color: var(--emerald-light);
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sample-pages-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .sample-page-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fafaf9;
+      text-align: center;
+      padding: 10px;
+      transition: var(--transition);
+    }
+    
+    .sample-page-card:hover {
+      border-color: var(--emerald-light);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sample-page-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .sample-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--emerald-primary);
+      margin-top: 8px;
+      display: block;
+    }
+
+    .pdf-viewer-modal {
+      width: 95%;
+      max-width: 900px;
+      height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pdf-viewer-frame {
+      flex: 1;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-top: 12px;
+      background: #525659;
+    }
+
+    .split-summary-box {
+      background: #fafaf9;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 0.85rem;
+    }
+
+    .split-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.8rem;
+    }
+
+    .orders-table th, .orders-table td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+    }
+    .orders-table th { background: #f5f5f4; font-weight: 700; }
+
+    .payment-waiting-pulse {
+      text-align: center;
+      padding: 16px;
+      border: 2px dashed #38bdf8;
+      border-radius: 12px;
+      background: #f0f9ff;
+      margin-top: 12px;
+    }
+
+    .otp-display-box {
+      background: var(--emerald-soft);
+      border: 2px dashed var(--emerald-light);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .otp-code {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: var(--emerald-primary);
+      margin: 8px 0;
+    }
+
+    .pill-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .pill-option {
+      flex: 1;
+      text-align: center;
+      padding: 12px 10px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: #ffffff;
+      color: var(--muted);
+      transition: var(--transition);
+    }
+
+    .pill-option:hover {
+      border-color: var(--emerald-light);
+    }
+
+    .pill-option.selected {
+      border-color: var(--emerald-primary);
+      background: var(--emerald-soft);
+      color: var(--emerald-primary);
+    }
+
+    .forgot-link {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--emerald-medium);
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    .support-floating-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--emerald-dark);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-lg);
+      cursor: pointer;
+      z-index: 40;
+      transition: var(--transition);
+    }
+
+    .support-floating-btn:hover {
+      transform: translateY(-4px) scale(1.03);
+      background: var(--emerald-primary);
+      box-shadow: 0 16px 32px rgba(2, 44, 34, 0.2);
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUpIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideDownFade { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes modalZoomIn { from { opacity: 0; transform: scale(0.96) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes cardAppear { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <!-- Top Strip -->
+  <div class="top-college-strip">
+    Verified Student Academic & Study Materials Marketplace
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+      <!-- Premium Generated Image Logo -->
+      <img 
+        src="https://raw.githubusercontent.com/Spady97/KBTCOE-NotesDesk/main/frontend/Gemini_Generated_Image_1cc5vu1cc5vu1cc5_2.png" 
+        alt="NotesDesk Logo" 
+        class="brand-logo-img"
+        onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Notes+Desk&background=064e3b&color=fde68a&rounded=true&bold=true&size=48';"
+      />
+      <div class="logo-text-group">
+        <div class="logo-title">Notes<span>Desk</span></div>
+        <div class="sub-brand">Academic Notes Marketplace</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="auth-badge-btn" id="authHeaderBtn" onclick="openAuthModal()">
+        <img id="headerUserAvatar" class="header-avatar" src="" alt="Avatar" />
+        <span id="authBadgeIcon">👤</span>
+        <span id="authBadgeLabel">Login</span>
+      </button>
+      <button class="dev-toggle-btn" id="devToggleBtn" onclick="handleDevAuth()">🛠️ Dev Mode</button>
+      <button class="upload-btn" onclick="protectedOpenUploadModal()">+ Sell Notes</button>
+    </div>
+  </header>
+
+  <!-- DEVELOPER BANNER -->
+  <div class="dev-banner" id="devBanner">
+    <span>⚡ DEVELOPER ADMIN ON</span>
+    <button class="dev-btn" onclick="openDevMaterialControlsModal()" style="background:#0284c7;">🎛️ Material Controls</button>
+    <button class="dev-btn" onclick="openDevAccountsModal()" style="background:#7c3aed;">👥 Students</button>
+    <button class="dev-btn" onclick="openSupportInboxModal()" style="background:#4338ca;">📬 Inquiries</button>
+    <button class="dev-btn" onclick="openDevSettingsModal()">⚙️ Fees</button>
+    <button class="dev-btn" onclick="openDevOrdersModal()">📋 Split Ledger & OTP</button>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-badge">Curated Excellence & Study Resources</div>
+    <h1>Find, Buy & Share High-Score <span>Notes</span></h1>
+    <p>Official Cashfree Payment Gateway active. Enjoy instant digital downloads, verified premium sample pages, and seamless transactions.</p>
+    <div class="search-box">
+      <span class="search-box-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by Subject, Topic, or File..." oninput="filterItems()" />
+    </div>
+  </section>
+
+  <!-- Filter Buttons -->
+  <div class="filters">
+    <button class="filter-btn active" onclick="setBranch('all', this)">All Branches</button>
+    <button class="filter-btn" onclick="setBranch('Mechanical', this)">Mechanical</button>
+    <button class="filter-btn" onclick="setBranch('Computer/IT', this)">Computer / IT</button>
+    <button class="filter-btn" onclick="setBranch('AI & DS', this)">AI & Data Science</button>
+    <button class="filter-btn" onclick="setBranch('Civil', this)">Civil</button>
+    <button class="filter-btn" onclick="setBranch('Electrical/E&TC', this)">Electrical / E&TC</button>
+  </div>
+
+  <!-- Notes Grid -->
+  <main class="container">
+    <div class="grid" id="notesGrid"></div>
+  </main>
+
+  <!-- Floating Help -->
+  <div class="support-floating-btn" onclick="openSupportFormModal()">
+    <span>💬 Help & Feedback</span>
+  </div>
+
+  <!-- AUTHENTICATION MODAL -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal">
+      <button class="modal-close-icon" onclick="closeAuthModal()">✕</button>
+
+      <!-- Unauthenticated View -->
+      <div id="unauthContainer">
+        <div class="auth-tabs" id="authTabsHeader">
+          <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+          <button class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')">Create Account</button>
+        </div>
+
+        <!-- 1. LOGIN FORM -->
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+          <button type="button" class="social-btn google" onclick="simulateSocialLogin('Google')">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign In with Google
+          </button>
+          
+          <div class="auth-divider">Or log in with Email / Mobile</div>
+
+          <div class="form-group">
+            <label>Email or Mobile Number *</label>
+            <input type="text" id="loginIdentifier" placeholder="e.g. 9405889886 or user@email.com" required />
+          </div>
+          <div class="form-group">
+            <label>Password *</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required />
+          </div>
+          <div style="text-align: right;">
+            <span class="forgot-link" onclick="openForgotOtpFlow()">Forgot Password? Login via OTP</span>
+          </div>
+          <div class="modal-actions">
+            <button type="submit" class="btn-primary" id="btnLoginSubmit">Sign In</button>
+          </div>
+        </form>
+
+        <!-- 2. FORGOT PASSWORD / LOGIN OTP -->
+        <form id="forgotOtpForm" style="display:none;" onsubmit="handleForgotOtpSubmit(event)">
+          <h4 style="color:var(--emerald-primary); font-size:1rem; margin-bottom:6px; font-family:'Playfair Display', serif;">Recover Access via Mobile/Email OTP</h4>
+          <p style="font-size:0.8rem; color:var(--muted); margin-bottom:16px;">Verifies against your registered account.</p>
+
+          <div class="form-group">
+            <label>Registered Mobile or Email *</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="forgotPhone" placeholder="e.g. 9405889886" required />
+              <button type="button" class="btn-primary" id="btnSendForgotOtp" style="flex:0 0 110px; font-size:0.8rem; background:var(--emerald-medium);" onclick="requestForgotOtp()">
+                Send OTP
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group" id="forgotOtpCodeGroup" style="display:none;">
+            <label>Enter 6-Digit OTP *</label>
+            <input type="text" id="forgotOtpInput" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:6px; font-weight:bold; font-size:1.2rem; text-align:center;" />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="backToPasswordLogin()">Back to Login</button>
+            <button type="submit" class="btn-primary" id="btnVerifyForgotOtp" style="display:none;">Verify & Log In</button>
+          </div>
+        </form>
+
+        <!-- 3. SIGNUP FORM (Step 1) -->
+        <form id="signupForm" style="display:none;" onsubmit="handleSignupSubmit(event)">
+          <button type="button" class="social-btn google" onclick="simulateSocialSignup('Google')">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign up with Google
+          </button>
+          <button type="button" class="social-btn facebook" onclick="simulateSocialSignup('Facebook')">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Sign up with Facebook
+          </button>
+          
+          <div class="auth-divider">Or create account manually</div>
+
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="regName" placeholder="e.g. Rahul Patil" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="regEmail" placeholder="user@college.edu" required />
+          </div>
+          <div class="form-group">
+            <label>Department / Branch *</label>
+            <select id="regBranch" required>
+              <option value="Mechanical">Mechanical Engineering</option>
+              <option value="Computer/IT">Computer / IT Engineering</option>
+              <option value="AI & DS">Artificial Intelligence & Data Science</option>
+              <option value="Civil">Civil Engineering</option>
+              <option value="Electrical/E&TC">Electrical / E&TC Engineering</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Create Password *</label>
+            <input type="password" id="regPassword" placeholder="Minimum 4 characters" minlength="4" required />
+          </div>
+          <div class="modal-actions">
+            <button type="submit" class="btn-primary" id="btnRegisterSubmit">Continue to Mobile Verification ➔</button>
+          </div>
+        </form>
+
+        <!-- 4. MANDATORY MOBILE OTP VERIFICATION (Step 2) -->
+        <form id="registrationOtpForm" style="display:none;" onsubmit="verifyRegistrationOtp(event)">
+          <h4 style="color:var(--emerald-primary); font-size:1.1rem; margin-bottom:6px; font-family:'Playfair Display', serif;">Security Check: Mobile Verification</h4>
+          <p style="font-size:0.8rem; color:var(--muted); margin-bottom:16px;">To ensure platform security, all accounts require a verified mobile number.</p>
+
+          <div class="form-group">
+            <label>Your Mobile Number *</label>
+            <div style="display:flex; gap:8px;">
+              <input type="tel" id="verifyMobileInput" placeholder="e.g. 9405889886" required />
+              <button type="button" class="btn-primary" id="btnSendRegOtp" style="flex:0 0 110px; font-size:0.8rem; background:var(--emerald-medium);" onclick="requestRegistrationOtp()">
+                Send OTP
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group" id="regOtpCodeGroup" style="display:none;">
+            <label>Enter 6-Digit SMS OTP *</label>
+            <input type="text" id="regOtpInput" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:6px; font-weight:bold; font-size:1.2rem; text-align:center;" />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="backToSignup()">Cancel</button>
+            <button type="submit" class="btn-primary" id="btnVerifyRegOtp" style="display:none;">Verify & Create Account</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Authenticated Profile View -->
+      <div id="loggedInProfileView" style="display:none;">
+        <div style="text-align:center;">
+          <div style="position:relative; display:inline-block;">
+            <img id="profileCardAvatar" class="avatar-preview-circle" src="" alt="Profile" />
+            <button type="button" onclick="document.getElementById('changeAvatarInput').click()" style="display:block; margin:4px auto 14px; background:var(--emerald-soft); color:var(--emerald-primary); border:1px solid #a7f3d0; font-size:0.75rem; padding:6px 12px; border-radius:14px; cursor:pointer; font-weight:700; transition:var(--transition);">
+              📷 Change Photo
+            </button>
+            <input type="file" id="changeAvatarInput" accept="image/*" style="display:none;" onchange="handleChangeProfilePhoto(event)" />
+          </div>
+
+          <h3 id="profileNameDisplay" style="color:var(--emerald-dark); font-size:1.4rem; font-weight:700;">Student Name</h3>
+          <p id="profileBranchDisplay" style="font-size:0.85rem; color:var(--muted); margin-bottom:14px;">Branch • Phone</p>
+        </div>
+
+        <div class="profile-tabs">
+          <button class="profile-tab-btn active" id="tabPurchasedBtn" onclick="switchProfileInventoryTab('purchased')">
+            📥 My Purchases (<span id="countPurchased">0</span>)
+          </button>
+          <button class="profile-tab-btn" id="tabListedBtn" onclick="switchProfileInventoryTab('listed')">
+            📤 Listed Items (<span id="countListed">0</span>)
+          </button>
+        </div>
+
+        <div id="purchasedListContainer" style="max-height:240px; overflow-y:auto; padding:4px;"></div>
+        <div id="listedListContainer" style="display:none; max-height:240px; overflow-y:auto; padding:4px;"></div>
+
+        <div class="modal-actions" style="margin-top:20px;">
+          <button type="button" class="btn-secondary" onclick="closeAuthModal()">⬅ Back to Store</button>
+          <button type="button" class="btn-secondary" style="color:#e11d48; font-weight:bold; background: #fff1f2; border: 1px solid #fecdd3;" onclick="handleLogout()">Log Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELLER UPLOAD MODAL -->
+  <div class="modal-backdrop" id="sellerModal">
+    <div class="modal">
+      <button class="modal-close-icon" onclick="closeUploadModal()">✕</button>
+      <h3 style="color: var(--emerald-primary); font-size:1.4rem; font-weight:700;">Upload Notes</h3>
+
+      <form id="sellerForm" onsubmit="handleSellerSubmit(event)">
+        <div class="form-group">
+          <label>1. Material Form *</label>
+          <select id="sellerListingType" onchange="toggleSellerDocInput()" required></select>
+        </div>
+
+        <div class="form-group">
+          <label>2. Department / Branch *</label>
+          <select id="sellerBranch" onchange="updateGeneratedFileName()" required>
+            <option value="Mechanical">Mechanical Engineering</option>
+            <option value="Computer/IT">Computer / IT Engineering</option>
+            <option value="AI & DS">Artificial Intelligence & Data Science</option>
+            <option value="Civil">Civil Engineering</option>
+            <option value="Electrical/E&TC">Electrical / E&TC Engineering</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>3. Subject Name *</label>
+          <input type="text" id="sellerSubject" placeholder="e.g. Applied Thermodynamics" oninput="updateGeneratedFileName()" required />
+        </div>
+
+        <div class="form-group">
+          <label>4. Specific Topics Covered *</label>
+          <input type="text" id="sellerTopic" placeholder="e.g. Units 1 to 3 Entropy" oninput="updateGeneratedFileName()" required />
+        </div>
+
+        <div class="form-group">
+          <label>🏷️ Standard File Name:</label>
+          <div id="generatedFileNameBox" style="font-size:0.8rem; font-family:monospace; color:var(--emerald-primary); background:var(--emerald-soft); border:1px dashed #a7f3d0; padding:10px 12px; border-radius:10px; word-break:break-all;">
+            NotesDesk_Mechanical_Applied_Thermodynamics.pdf
+          </div>
+        </div>
+
+        <div class="form-group" id="sellerDocGroup" style="display:block;">
+          <label>📁 Select Document from Device (PDF, PPT, Excel, Word) *</label>
+          <div class="device-file-box" onclick="triggerDeviceFileInput()">
+            <span id="pdfFileSelectLabel" style="font-size:0.9rem; font-weight:700; color:var(--emerald-primary);">
+              📄 Tap here to Choose Document from Phone
+            </span>
+            <input type="file" id="sellerPdfFileInput" accept=".pdf,.ppt,.pptx,.xls,.xlsx,.doc,.docx" onchange="handleDirectFileUpload(event)" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Title of Material *</label>
+          <input type="text" id="sellerTitle" placeholder="e.g. Complete Revision Notes" required />
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <div class="form-group" style="flex: 1;">
+            <label>Price (₹) *</label>
+            <input type="number" id="sellerPrice" placeholder="50" min="10" required />
+          </div>
+          <div class="form-group" style="flex: 1.5;">
+            <label>Your Payout UPI ID *</label>
+            <input type="text" id="sellerUPI" placeholder="seller@okaxis" required />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeUploadModal()">Cancel</button>
+          <button type="submit" class="btn-primary btn-gold" id="btnPublishDoc">Publish to Platform</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxoRUr5ewJbxGAw67xLNlWwxD4zHWeCzlHfO1ypCGUxnD0Vh6UgLPG6zSUfbf4QOKBQ/exec";
+
+    // DB and Arrays
+    let items = JSON.parse(localStorage.getItem('notesdesk_items')) || [];
+    let orders = JSON.parse(localStorage.getItem('notesdesk_orders')) || [];
+    let devSettings = JSON.parse(localStorage.getItem('notesdesk_dev_settings')) || { commissionPercent: 10, flatFee: 2, enableSoft: true, enableHard: true, enableBoth: true };
+    let accounts = JSON.parse(localStorage.getItem('notesdesk_student_accounts')) || [];
+    let currentUser = JSON.parse(localStorage.getItem('notesdesk_current_user')) || null;
+
+    let isDevMode = false;
+    let currentBranch = 'all';
+    let stagedFileBlob = null;
+    let stagedFileExt = 'pdf';
+
+    // REGISTRATION OTP STATE
+    let pendingRegistration = null;
+    let currentRegOtp = null;
+
+    // FORGOT LOGIN OTP STATE
+    let currentForgotOtp = null;
+    let forgotOtpTargetUser = null;
+
+    function saveItems() { localStorage.setItem('notesdesk_items', JSON.stringify(items)); }
+    function saveOrders() { localStorage.setItem('notesdesk_orders', JSON.stringify(orders)); }
+    function saveAccounts() { localStorage.setItem('notesdesk_student_accounts', JSON.stringify(accounts)); }
+    function saveCurrentUser() { localStorage.setItem('notesdesk_current_user', JSON.stringify(currentUser)); }
+
+    function refreshAuthUI() {
+      const avatarImg = document.getElementById('headerUserAvatar');
+      const iconSpan = document.getElementById('authBadgeIcon');
+      const labelSpan = document.getElementById('authBadgeLabel');
+
+      if (currentUser) {
+        if (currentUser.avatar) {
+          avatarImg.src = currentUser.avatar;
+          avatarImg.style.display = 'inline-block';
+          iconSpan.style.display = 'none';
+        } else {
+          avatarImg.style.display = 'none';
+          iconSpan.style.display = 'inline-block';
+          iconSpan.innerText = '🎓';
+        }
+        labelSpan.innerText = currentUser.name.split(' ')[0];
+      } else {
+        avatarImg.style.display = 'none';
+        iconSpan.style.display = 'inline-block';
+        iconSpan.innerText = '👤';
+        labelSpan.innerText = 'Login';
+      }
+    }
+
+    function openAuthModal() {
+      if (currentUser) {
+        document.getElementById('unauthContainer').style.display = 'none';
+        document.getElementById('loggedInProfileView').style.display = 'block';
+        document.getElementById('profileNameDisplay').innerText = currentUser.name;
+        document.getElementById('profileBranchDisplay').innerText = `${currentUser.branch || 'User'} • ${currentUser.phone}`;
+        renderProfileInventory();
+      } else {
+        document.getElementById('unauthContainer').style.display = 'block';
+        document.getElementById('loggedInProfileView').style.display = 'none';
+        switchAuthTab('login');
+      }
+      document.getElementById('authModal').style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').style.display = 'none';
+    }
+
+    function switchAuthTab(tab) {
+      document.getElementById('authTabsHeader').style.display = 'flex';
+      document.getElementById('registrationOtpForm').style.display = 'none';
+      document.getElementById('forgotOtpForm').style.display = 'none';
+
+      if (tab === 'login') {
+        document.getElementById('tabLogin').classList.add('active');
+        document.getElementById('tabSignup').classList.remove('active');
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('signupForm').style.display = 'none';
+      } else {
+        document.getElementById('tabSignup').classList.add('active');
+        document.getElementById('tabLogin').classList.remove('active');
+        document.getElementById('signupForm').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+      }
+    }
+
+    // --- LOGIN LOGIC ---
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const identifier = document.getElementById('loginIdentifier').value.trim();
+      const pass = document.getElementById('loginPassword').value.trim();
+      
+      const user = accounts.find(a => (a.phone === identifier || a.email === identifier) && a.pass === pass);
+      if (user) {
+        currentUser = user;
+        saveCurrentUser();
+        refreshAuthUI();
+        closeAuthModal();
+        alert(`🎉 Welcome back, ${user.name}!`);
+      } else {
+        alert("❌ Invalid credentials. Please try again.");
+      }
+    }
+
+    function simulateSocialLogin(provider) {
+      alert(`[Simulation] Checking ${provider} session...`);
+      // Since this is frontend only, we can't truly log in to Google. 
+      // Prompt user to use standard login or sign up instead.
+      alert(`Because this is a demo, please use the Email/Mobile login below or Create an Account.`);
+    }
+
+    // --- FORGOT PASSWORD OTP ---
+    function openForgotOtpFlow() {
+      document.getElementById('authTabsHeader').style.display = 'none';
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('forgotOtpForm').style.display = 'block';
+    }
+
+    function backToPasswordLogin() {
+      document.getElementById('forgotOtpForm').style.display = 'none';
+      document.getElementById('authTabsHeader').style.display = 'flex';
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('forgotOtpCodeGroup').style.display = 'none';
+      document.getElementById('btnVerifyForgotOtp').style.display = 'none';
+    }
+
+    function requestForgotOtp() {
+      const identifier = document.getElementById('forgotPhone').value.trim();
+      const user = accounts.find(a => a.phone === identifier || a.email === identifier);
+      
+      if (!user) {
+        alert("Account not found with that number/email.");
+        return;
+      }
+
+      currentForgotOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      forgotOtpTargetUser = user;
+
+      document.getElementById('forgotOtpCodeGroup').style.display = 'block';
+      document.getElementById('btnVerifyForgotOtp').style.display = 'block';
+      document.getElementById('forgotOtpInput').value = currentForgotOtp; // Auto-fill for demo
+
+      alert(`📲 [Simulated SMS/Email]\nYour NotesDesk Login OTP is: ${currentForgotOtp}`);
+    }
+
+    function handleForgotOtpSubmit(e) {
+      e.preventDefault();
+      const enteredOtp = document.getElementById('forgotOtpInput').value.trim();
+      
+      if (enteredOtp !== currentForgotOtp) {
+        alert("❌ Invalid OTP!");
+        return;
+      }
+      currentUser = forgotOtpTargetUser;
+      saveCurrentUser();
+      refreshAuthUI();
+      closeAuthModal();
+      backToPasswordLogin();
+      alert(`🎉 Logged in successfully! Welcome, ${currentUser.name}!`);
+    }
+
+    // --- SIGNUP & MANDATORY OTP VERIFICATION LOGIC ---
+    function handleSignupSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('regEmail').value.trim();
+      
+      // Check if email exists
+      if (accounts.some(a => a.email === email)) {
+        alert("⚠️ This email is already registered.");
+        return;
+      }
+
+      // Store pending registration data instead of saving immediately
+      pendingRegistration = {
+        name: document.getElementById('regName').value.trim(),
+        email: email,
+        branch: document.getElementById('regBranch').value,
+        pass: document.getElementById('regPassword').value.trim(),
+        avatar: ""
+      };
+
+      transitionToOtpVerification();
+    }
+
+    function simulateSocialSignup(provider) {
+      alert(`[Simulation] Authenticating with ${provider}...`);
+      // Simulate grabbing data from social provider
+      pendingRegistration = {
+        name: `User from ${provider}`,
+        email: `socialuser@${provider.toLowerCase()}.com`,
+        branch: "General",
+        pass: "social_auth",
+        avatar: ""
+      };
+      transitionToOtpVerification();
+    }
+
+    function transitionToOtpVerification() {
+      document.getElementById('authTabsHeader').style.display = 'none';
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('registrationOtpForm').style.display = 'block';
+    }
+
+    function backToSignup() {
+      pendingRegistration = null;
+      document.getElementById('registrationOtpForm').style.display = 'none';
+      document.getElementById('authTabsHeader').style.display = 'flex';
+      document.getElementById('signupForm').style.display = 'block';
+      document.getElementById('regOtpCodeGroup').style.display = 'none';
+      document.getElementById('btnVerifyRegOtp').style.display = 'none';
+    }
+
+    function requestRegistrationOtp() {
+      const phone = document.getElementById('verifyMobileInput').value.trim();
+      if (accounts.some(a => a.phone === phone)) {
+        alert("⚠️ This mobile number is already registered to another account.");
+        return;
+      }
+      
+      pendingRegistration.phone = phone; // attach phone to pending account
+      currentRegOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      document.getElementById('regOtpCodeGroup').style.display = 'block';
+      document.getElementById('btnVerifyRegOtp').style.display = 'block';
+      document.getElementById('regOtpInput').value = currentRegOtp; // Auto-fill for demo
+
+      alert(`📲 [Simulated SMS]\nNotesDesk Verification OTP is: ${currentRegOtp}`);
+    }
+
+    function verifyRegistrationOtp(e) {
+      e.preventDefault();
+      const enteredOtp = document.getElementById('regOtpInput').value.trim();
+      
+      if (enteredOtp !== currentRegOtp) {
+        alert("❌ Invalid OTP! Please try again.");
+        return;
+      }
+
+      // OTP matches! Finalize account creation.
+      const newAccount = {
+        id: Date.now(),
+        name: pendingRegistration.name,
+        email: pendingRegistration.email,
+        phone: pendingRegistration.phone,
+        branch: pendingRegistration.branch,
+        pass: pendingRegistration.pass,
+        avatar: ""
+      };
+
+      accounts.push(newAccount);
+      saveAccounts();
+      
+      currentUser = newAccount;
+      saveCurrentUser();
+      refreshAuthUI();
+      closeAuthModal();
+      
+      alert(`✅ Account created and mobile verified for ${newAccount.name}!`);
+      
+      // Cleanup
+      pendingRegistration = null;
+      currentRegOtp = null;
+      document.getElementById('signupForm').reset();
+      document.getElementById('registrationOtpForm').reset();
+      backToSignup(); // reset UI state for next time
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      saveCurrentUser();
+      refreshAuthUI();
+      closeAuthModal();
+      alert("You have logged out.");
+    }
+
+    // Initialize UI on load
+    window.onload = function() {
+      refreshAuthUI();
+      if(items.length === 0) {
+        document.getElementById('notesGrid').innerHTML = '<p style="text-align: center; color: var(--muted); padding: 3rem 0;">No matching notes found.</p>';
+      } else {
+        // Render existing items if any
+      }
+    };
+
+    // Keep placeholder functions for Dev Tools and Upload Modals to prevent errors
+    function handleDevAuth() { alert("Dev mode accessible via script logic."); }
+    function protectedOpenUploadModal() { if(currentUser) { document.getElementById('sellerModal').style.display = 'flex'; } else { openAuthModal(); } }
+    function closeUploadModal() { document.getElementById('sellerModal').style.display = 'none'; }
+    function switchProfileInventoryTab(tab) {}
+    function renderProfileInventory() {}
+  </script>
+</body>
+</html>
